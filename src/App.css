@@ -1,8 +1,202 @@
+@import url(https://db.onlinewebfonts.com/c/130a63bec7d0efc605bbe6253a27de98?family=InspireTWDC);
+
 html {
   color-scheme: light dark;
-  font-family: system-ui;
+  font-family: 'InspireTWDC', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
 }
+img {
+    overflow-clip-margin: content-box;
+    overflow: clip;
+    width:100%
+}
+
+.view {
+  width: 1080px;
+  background-color:#17171B;
+  color:#fff;
+  padding:8px;
+  
+}
+
+.collection-title{
+margin-left:12px;
+margin-bottom: 6px;
+font-family: "InspireTWDC";
+}
+
+.tile{
+aspect-ratio: 16/9;
+align-content: center;
+justify-items: center;
+border-radius: 4px;
+ margin:10px;
+ flex-shrink: 0;
+ border-radius: 4px;
+ scroll-snap-align: center;
+ position: relative;
+ width: 303px;
+ height: auto;
+ /* transform: scale(1) translateZ(0); */
+ -webkit-font-smoothing: subpixel-antialiased;
+  background-color: rgb(45, 47, 54);
+  transform: scale(1) translateZ(0);
+  animation: bounce-in 300ms cubic-bezier(0.175, 0.885, 0.320, 1.275) 1 forwards;
+  animation-delay: 500ms;
+  opacity: 0;
+  transform-style: preserve-3d;
+  animation-fill-mode: forwards;
+  /* transition-timing-function: ease-out; */
+transition:transform 500ms ease-in-out;
+view-transition-class: tile;
+
+}
+.tile:focus-visible{
+  transform: scale(1.05) translateZ(0) translateZ(0);
+}
+@keyframes bounce-in{
+  0%{
+    opacity: 0;
+    transform: scaleX(.55) scaleY(.89);
+  }
+  50%{
+    opacity: 1;   
+  }
+  100%{
+    opacity: 1;   
+  }
+}
+
+
+ a .tile{
+ height: fit-content;
+}
+.tile-row{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+   -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+  scrollbar-width: none;  /* Hide scrollbar for Firefox */
+  padding-left: 8px;
+
+}
+.tile-row::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+}
+.tile-image{
+  width: 100%;
+  border-radius: inherit;
+  display: block;
+  aspect-ratio: 16/9;
+
+}
+
+.tile-content {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(45, 47, 54);
+  border-radius: inherit;
+}
+
+:focus-visible{
+  outline: solid 2px white;
+  outline-offset: 2px;
+  border-radius:4px;
+}
+
+html:active-view-transition-type(ArrowUp, ArrowDown, ArrowLeft, ArrowRight) {
+  :root {
+    view-transition-name: none;
+  }
+  .tile-row {
+    view-transition-name: content;
+  }
+  
+}
+
+/* Animation styles for down */
+html:active-view-transition-type(ArrowDown) {
+  &::view-transition-old(content) {
+    animation-name: slide-out-to-top;
+  }
+  &::view-transition-new(content) {
+    animation-name: slide-in-from-bottom;
+  }
+}
+/* Animation styles for up */
+html:active-view-transition-type(ArrowUp) {
+  &::view-transition-old(content) {
+    animation-name: slide-out-to-bottom;
+  }
+  &::view-transition-new(content) {
+    animation-name: slide-in-from-top;
+  }
+}
+html:active-view-transition-type(ArrowLeft, ArrowRight) {
+  &::view-transition-old(content){
+    display: none;
+  }
+  &::view-transition-new(content) {
+    animation: none;
+  /* Use normal blending,
+  so the new view sits on top and obscures the old view */
+  mix-blend-mode: normal;
+  }
+}
+/* html:active-view-transition-type(reload) {
+  &::view-transition-old(content) {
+    animation-name: fade-out, scale-down;
+  }
+  &::view-transition-new(content) {
+    animation-delay: 0.25s;
+    animation-name: fade-in, scale-up;
+  }
+} */
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+@keyframes slide-in-from-bottom {
+  from { transform: translateY(-200px);
+  opacity: 0;  }
+}
+@keyframes slide-in-from-top {
+  from { transform: translateY(200px);
+  opacity: 0;  }
+}
+@keyframes slide-out-to-bottom {
+  to { transform: translateY(-200px); 
+  opacity: 0; 
+  }
+}
+@keyframes slide-out-to-top {
+  to { transform: translateY(200px); 
+  opacity: 0; 
+  }
+}
+@keyframes slide-from-right {
+  from { transform: translateX(30px); }
+}
+
+@keyframes slide-to-left {
+  to { transform: translateX(-30px); }
+}
+
+/* ::view-transition-old(root) {
+  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+}
+
+::view-transition-new(root) {
+  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+} */
