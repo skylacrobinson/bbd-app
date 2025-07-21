@@ -18,6 +18,7 @@
 <img src="https://img.shields.io/badge/npm-CB3837.svg?style=flat&logo=npm&logoColor=white" alt="npm">
 <img src="https://img.shields.io/badge/TypeScript-3178C6.svg?style=flat&logo=TypeScript&logoColor=white" alt="TypeScript">
 <img src="https://img.shields.io/badge/react-%2320232a.svg?style=flat&logo=react&logoColor=%2361DAFB">
+<img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=flat&logo=html5&logoColor=white">
 </div>
 <br>
 
@@ -34,7 +35,7 @@ This project is a simplified feature implementation of a Disney+ style home page
 **Live Demo at https://skylacrobinson.github.io/bbd-app/**
 
 
-### Features
+## Features
 
 - 🎯 **Focus Management:** Implements focus trapping and utilizes keyboard navigation for main user interactions.
 - 🖼️ **Media Handling:** Supports dynamic image conversion, fallback images, and inline video playback for engaging multimedia experiences.
