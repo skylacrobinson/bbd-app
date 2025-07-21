@@ -4,7 +4,7 @@
 <div align="left">
 
 
-# BBD-APP
+# Browser Based Device - Take Home Assignment
 
 <em>Transforming Ideas into Seamless Digital Experiences</em>
 
@@ -24,85 +24,68 @@
 
 ---
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-    - [Usage](#usage)
-    - [Testing](#testing)
-
----
-
 ## Overview
 
-bbd-app is a comprehensive React and TypeScript-based toolkit for building accessible, media-rich web applications. It combines modular components, focus management, and dynamic media handling to deliver seamless user experiences.
+This project is a React and TypeScript-based component for displaying a media-rich browser based streaming application. It combines modular components, focus management, and dynamic media handling to deliver seamless user experiences that prioritizes keyboard interactions.
 
-**Why bbd-app?**
-
-This project aims to simplify the development of modern, responsive media interfaces with a focus on accessibility and performance. The core features include:
-
-- 🎯 **Focus & Accessibility:** Implements focus trapping and keyboard navigation to ensure inclusive user interactions.
-- 🖼️ **Media Handling:** Supports dynamic image conversion, fallback images, and inline video playback for engaging multimedia experiences.
-- ⚙️ **Modular Components:** Provides reusable UI elements like tiles, modals, and navigation aids for flexible interface design.
-- 🔄 **Data Integration:** Facilitates efficient data fetching and metadata extraction to keep content fresh and relevant.
-- 🚀 **Streamlined Deployment:** Built-in scripts and configurations enable easy building and publishing to platforms like GitHub Pages.
 
 ---
 
-## Getting Started
+## View Project
 
-### Prerequisites
+**Live Demo at [https://skylacrobinson.github.io/bbd-app/]([https://www.npmjs.com/](https://skylacrobinson.github.io/bbd-app/)):**
+ Site is hosted at <link>https://skylacrobinson.github.io/bbd-app/</link>
 
-This project requires the following dependencies:
+### Features
 
-- **Programming Language:** TypeScript
-- **Package Manager:** Npm
+- 🎯 **Focus Management:** Implements focus trapping and utilizes keyboard navigation for main user interactions.
+- 🖼️ **Media Handling:** Supports dynamic image conversion, fallback images, and inline video playback for engaging multimedia experiences.
+- ⚙️ **Modular Components:** Provides reusable UI elements like tiles, modals, and navigation aids for flexible interface design.
+- 🔄 **Data Integration:** Facilitates efficient data fetching from Disney+ API and handles data inconsistencies with TypeScript.
+- 🚀 **Magical Animations:** Incorperates fun user animations to when interactions occur with tiles and modals.
 
-### Installation
 
-Build bbd-app from the source and install dependencies:
+---
 
-1. **Clone the repository:**
-
-    ```sh
-    ❯ git clone https://github.com/skylacrobinson/bbd-app
-    ```
-
-2. **Navigate to the project directory:**
-
-    ```sh
-    ❯ cd bbd-app
-    ```
-
-3. **Install the dependencies:**
-
-**Using [npm](https://www.npmjs.com/):**
-
+### Folder Structure
 ```sh
-❯ npm install
+└── bbd-app/
+    ...
+    ├── src
+    │   ├── App.css     //CSS styles
+    │   ├── App.tsx     // Main layout and routing
+    │   ├── components  // UI components (Tile, Modal, Row, etc.)
+    │   ├── context     // Global navigation state
+    │   ├── hooks-utils // Custom hooks and utility functions
+    │   ├── index.html  // Main HTML
+    │   ├── index.tsx   // Main TSX
+    │   └── types       // TypeScript interfaces and types
+    └── tsconfig.json
 ```
 
 ### Usage
+This app was built to only require keyboard in put. Some of the keyboard commands include:
 
-Run the project with:
+⬅️ ➡️ **Left & Right Arrows:** Navigate left and right between tiles
+⬆️ ⬇️ **Up & Down Arrows:** Navigate up and down between collections
+[  ] **Spacebar:** Selects focused tile to open details modal and closes modal
 
-**Using [npm](https://www.npmjs.com/):**
+**Further instructions are also included in the app**
 
-```sh
-npm start
-```
 
-### Testing
+---
 
-Bbd-app uses the {__test_framework__} test framework. Run the test suite with:
+### Future Possibilities
 
-**Using [npm](https://www.npmjs.com/):**
+Something I love about web development is that the possibilities are endless when creating new components and interactions!
 
-```sh
-npm test
-```
+If I had more time to build this project and explore the possibilites, I would...
+
+-Intergrate responsivenes to various devices and screen sizes
+-Improve animation features, particularly exit animations
+-Add unit and integration tests using Jest and React Testing Library
+
+
 
 ---
 
