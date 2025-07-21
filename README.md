@@ -8,10 +8,12 @@
 
 <em>"The way to get started is to quit talking and begin doing." -Walt Disney</em>
 
+This project is a simplified feature implementation of a Disney+ style home page interface, built with React and TypeScript. The app fetches content from a public JSON API and allows remote-style navigation using arrow keys. It combines modular components, focus management, component animations, and dynamic media handling to deliver seamless user experiences that prioritizes keyboard interactions.
+
 <!-- BADGES -->
 <img src="https://img.shields.io/github/languages/top/skylacrobinson/bbd-app?style=flat&color=0080ff" alt="repo-top-language">
 <img src="https://img.shields.io/github/languages/count/skylacrobinson/bbd-app?style=flat&color=0080ff" alt="repo-language-count">
-
+<br>
 <em>Built with these tools and technologies:</em>
 
 <img src="https://img.shields.io/badge/JSON-000000.svg?style=flat&logo=JSON&logoColor=white" alt="JSON">
