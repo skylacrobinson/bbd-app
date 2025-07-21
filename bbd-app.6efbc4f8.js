@@ -16109,7 +16109,7 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "App", ()=>App);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _appCss = require("./App.css");
-var _tileContext = require("./context/TileContext");
+var _appContext = require("./context/AppContext");
 var _mainContent = require("./components/MainContent");
 var _mainContentDefault = parcelHelpers.interopDefault(_mainContent);
 var _useGetData = require("./hooks-utils/useGetData");
@@ -16120,7 +16120,7 @@ function App() {
     _s();
     const { data, loading, error } = (0, _useGetData.useGetData)();
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _tileContext.AppProvider), {
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _appContext.AppProvider), {
             children: [
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _instructionsDefault.default), {}, void 0, false, {
                     fileName: "src/App.tsx",
@@ -16154,7 +16154,7 @@ $RefreshReg$(_c, "App");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","./App.css":"6n0o6","./components/MainContent":"f54z2","./hooks-utils/useGetData":"itwBn","./components/Instructions":"iC4ed","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./context/TileContext":"lHa1o"}],"6n0o6":[function() {},{}],"f54z2":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","./App.css":"6n0o6","./components/MainContent":"f54z2","./hooks-utils/useGetData":"itwBn","./components/Instructions":"iC4ed","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./context/AppContext":"EXQcf"}],"6n0o6":[function() {},{}],"f54z2":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$764b = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$764b.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -16171,12 +16171,12 @@ var _modalDetails = require("./ModalDetails");
 var _modalDetailsDefault = parcelHelpers.interopDefault(_modalDetails);
 var _tileRow = require("./TileRow");
 var _tileRowDefault = parcelHelpers.interopDefault(_tileRow);
-var _tileContext = require("../context/TileContext");
+var _appContext = require("../context/AppContext");
 var _s = $RefreshSig$();
 function MainContent() {
     _s();
     const [open, setOpen] = (0, _react.useState)(false); //Manage modal open state
-    const { data, currentCollectionIndex, setCurrentCollectionIndex, currentTileIndex, setCurrentTileIndex, setCurrentTileData } = (0, _tileContext.useAppContext)();
+    const { data, currentCollectionIndex, setCurrentCollectionIndex, currentTileIndex, setCurrentTileIndex, setCurrentTileData } = (0, _appContext.useAppContext)();
     const containerRef = (0, _react.useRef)(null); // Reference to the tile row container
     const handleClose = ()=>{
         // Close the modal and reset the current tile data and return focus to the current tile
@@ -16370,7 +16370,7 @@ function MainContent() {
 }
 _s(MainContent, "juY5f/XGU6heOU/8PxvSQH4xZKI=", false, function() {
     return [
-        (0, _tileContext.useAppContext)
+        (0, _appContext.useAppContext)
     ];
 });
 _c = MainContent;
@@ -16382,7 +16382,7 @@ $RefreshReg$(_c, "MainContent");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./ModalDetails":"f9Zvu","./TileRow":"jF58x","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/TileContext":"lHa1o"}],"f9Zvu":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./ModalDetails":"f9Zvu","./TileRow":"jF58x","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/AppContext":"EXQcf"}],"f9Zvu":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$eaa4 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$eaa4.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -16395,10 +16395,9 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>ModalDetails);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _react = require("react");
-var _reactDefault = parcelHelpers.interopDefault(_react);
 var _backgroundDetails = require("./BackgroundDetails");
 var _backgroundDetailsDefault = parcelHelpers.interopDefault(_backgroundDetails);
-var _tileContext = require("../context/TileContext");
+var _appContext = require("../context/AppContext");
 var _chipDetails = require("./ChipDetails");
 var _chipDetailsDefault = parcelHelpers.interopDefault(_chipDetails);
 var _useFocusTrap = require("../hooks-utils/useFocusTrap");
@@ -16406,7 +16405,7 @@ var _useFocusTrapDefault = parcelHelpers.interopDefault(_useFocusTrap);
 var _s = $RefreshSig$();
 function ModalDetails({ open, onClose }) {
     _s();
-    const { data, currentCollectionIndex, currentTileIndex } = (0, _tileContext.useAppContext)();
+    const { data, currentCollectionIndex, currentTileIndex } = (0, _appContext.useAppContext)();
     const tileData = data && data.containers[currentCollectionIndex].set.items[currentTileIndex];
     const focusRef = (0, _react.useRef)(null);
     const handleClose = (e)=>{
@@ -16520,7 +16519,7 @@ function ModalDetails({ open, onClose }) {
 }
 _s(ModalDetails, "pzoJUfypnwufm7O+Korcgs9rE0A=", false, function() {
     return [
-        (0, _tileContext.useAppContext)
+        (0, _appContext.useAppContext)
     ];
 });
 _c = ModalDetails;
@@ -16532,7 +16531,7 @@ $RefreshReg$(_c, "ModalDetails");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./BackgroundDetails":"89XJW","./ChipDetails":"cT7kZ","../hooks-utils/useFocusTrap":"cpC3Z","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/TileContext":"lHa1o"}],"89XJW":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./BackgroundDetails":"89XJW","./ChipDetails":"cT7kZ","../hooks-utils/useFocusTrap":"cpC3Z","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/AppContext":"EXQcf"}],"89XJW":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$863a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$863a.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -19453,12 +19452,12 @@ function trapFocus(e, focusableEls, firstEl, lastEl) {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"lHa1o":[function(require,module,exports,__globalThis) {
-var $parcel$ReactRefreshHelpers$e00d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-$parcel$ReactRefreshHelpers$e00d.init();
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"EXQcf":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$c669 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$c669.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
 var prevRefreshSig = globalThis.$RefreshSig$;
-$parcel$ReactRefreshHelpers$e00d.prelude(module);
+$parcel$ReactRefreshHelpers$c669.prelude(module);
 
 try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -19498,7 +19497,7 @@ const AppProvider = ({ children })=>{
         },
         children: children
     }, void 0, false, {
-        fileName: "src/context/TileContext.tsx",
+        fileName: "src/context/AppContext.tsx",
         lineNumber: 40,
         columnNumber: 9
     }, undefined);
@@ -19512,7 +19511,7 @@ _c = AppProvider;
 var _c;
 $RefreshReg$(_c, "AppProvider");
 
-  $parcel$ReactRefreshHelpers$e00d.postlude(module);
+  $parcel$ReactRefreshHelpers$c669.postlude(module);
 } finally {
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
@@ -19581,11 +19580,11 @@ var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _jsxRuntime = require("react/jsx-runtime");
 var _tile = require("./Tile");
 var _tileDefault = parcelHelpers.interopDefault(_tile);
-var _tileContext = require("../context/TileContext");
+var _appContext = require("../context/AppContext");
 var _s = $RefreshSig$();
 function TileRow() {
     _s();
-    const { currentCollectionIndex, data } = (0, _tileContext.useAppContext)();
+    const { currentCollectionIndex, data } = (0, _appContext.useAppContext)();
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxRuntime.Fragment), {
         children: data?.containers[currentCollectionIndex].set.items.map((item, index)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _tileDefault.default), {
                 index: index,
@@ -19603,7 +19602,7 @@ function TileRow() {
 }
 _s(TileRow, "csO23hEUAgfJ06P4E94tus74ZQE=", false, function() {
     return [
-        (0, _tileContext.useAppContext)
+        (0, _appContext.useAppContext)
     ];
 });
 _c = TileRow;
@@ -19615,7 +19614,7 @@ $RefreshReg$(_c, "TileRow");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react/jsx-runtime":"05iiF","./Tile":"43ae3","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/TileContext":"lHa1o"}],"43ae3":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react/jsx-runtime":"05iiF","./Tile":"43ae3","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/AppContext":"EXQcf"}],"43ae3":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$1c5d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$1c5d.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -19628,18 +19627,17 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>Tile);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _react = require("react");
-var _reactDefault = parcelHelpers.interopDefault(_react);
 var _tileImage = require("./TileImage");
 var _useGetDisplay = require("../hooks-utils/useGetDisplay");
 var _tileFallbackImage = require("./TileFallbackImage");
-var _tileContext = require("../context/TileContext");
+var _appContext = require("../context/AppContext");
 var _videoPlayback = require("./VideoPlayback");
 var _s = $RefreshSig$();
 function Tile(props) {
     _s();
     const { image, text, index, videoArt } = props;
     const { titleText, tileImage } = (0, _useGetDisplay.useGetDisplay)(image, text);
-    const { currentTileIndex, currentCollectionIndex } = (0, _tileContext.useAppContext)();
+    const { currentTileIndex, currentCollectionIndex } = (0, _appContext.useAppContext)();
     const [view, setView] = (0, _react.useState)('tile');
     (0, _react.useEffect)(()=>{
         /**
@@ -19753,7 +19751,7 @@ function Tile(props) {
 _s(Tile, "f93EdAvzm84zb1Jc+hwdI5Vl/84=", false, function() {
     return [
         (0, _useGetDisplay.useGetDisplay),
-        (0, _tileContext.useAppContext)
+        (0, _appContext.useAppContext)
     ];
 });
 _c = Tile;
@@ -19765,7 +19763,7 @@ $RefreshReg$(_c, "Tile");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./TileImage":"jOUIX","../hooks-utils/useGetDisplay":"bTT0Y","./TileFallbackImage":"8wBMi","./VideoPlayback":"aOG3p","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/TileContext":"lHa1o"}],"8wBMi":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./TileImage":"jOUIX","../hooks-utils/useGetDisplay":"bTT0Y","./TileFallbackImage":"8wBMi","./VideoPlayback":"aOG3p","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/AppContext":"EXQcf"}],"8wBMi":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$c5a0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$c5a0.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
