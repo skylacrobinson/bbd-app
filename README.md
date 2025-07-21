@@ -33,7 +33,7 @@ This project is a React and TypeScript-based component for displaying a media-ri
 
 ## View Project
 
-**Live Demo at [https://skylacrobinson.github.io/bbd-app/]([https://www.npmjs.com/](https://skylacrobinson.github.io/bbd-app/)):**
+**Live Demo at ((https://skylacrobinson.github.io/bbd-app/)):**
  Site is hosted at <link>https://skylacrobinson.github.io/bbd-app/</link>
 
 ### Features
