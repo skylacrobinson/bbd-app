@@ -43,7 +43,7 @@ This project is a simplified feature implementation of a Disney+ style home page
 - 🚀 **Magical Animations:** Incorporates fun user animations to when interactions occur with tiles and modals.
 
 
-### Usage
+## Usage
 This app was built to only require keyboard in put. Some of the keyboard commands include:
 
 ⬅️ ➡️ **Left & Right Arrows:** Navigate left and right between tiles
@@ -53,7 +53,7 @@ This app was built to only require keyboard in put. Some of the keyboard command
 **Further instructions are also included in the app**
 
 
-### Future Possibilities
+## Future Possibilities
 
 Something I love about web development is that the possibilities are endless when creating new components and interactions!
 
@@ -64,7 +64,7 @@ If I had more time to build this project and explore the possibilites, I would..
 -Add unit and integration tests using Jest and React Testing Library
 
 
-### Folder Structure
+## Folder Structure
 ```sh
 └── bbd-app/
     ...
