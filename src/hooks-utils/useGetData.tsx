@@ -53,9 +53,7 @@ interface Slugs{
 const url= 'https://cd-static.bamgrid.com/dp-7068675309/home.json'
 
 
-// getData().then(data=>{
-//     console.log(data)
-// })
+
 
 export const useGetData=()=>{
   const [data, setData] = useState<Response>();
@@ -69,8 +67,7 @@ export const useGetData=()=>{
       throw new Error(`Response status: ${response.status}`);
     }
     const json = await response.json();
-    console.log(json.data.StandardCollection);
-    console.log(json);
+   
     setData(json.data.StandardCollection as Response);
     // return json.data.StandardCollection as Response;
     
