@@ -1,10 +1,22 @@
 import './App.css';
+import { AppProvider } from './components/TileContext';
+import MainContent from './components/MainContent';
+import { useGetData } from './hooks-utils/useGetData';
+import Instructions from './components/Instructions';
+
 
 export function App() {
+      const {data, loading, error}=useGetData();
+
+
   return (
     <>
-      <h1>Parcel React App</h1>
-      <p>Edit <code>src/App.tsx</code> to get started!</p>
+    <AppProvider>
+      <Instructions/>
+      {!loading && data &&
+      <MainContent/>
+      
+      }</AppProvider>
     </>
   );
 }
