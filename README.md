@@ -4,7 +4,7 @@
 <div align="left">
 
 
-# Browser Based Device - Take Home Assignment
+# Disney Browser Based Device - Take Home Assignment
 
 <em>Transforming Ideas into Seamless Digital Experiences</em>
 
@@ -33,8 +33,8 @@ This project is a React and TypeScript-based component for displaying a media-ri
 
 ## View Project
 
-**Live Demo at ((https://skylacrobinson.github.io/bbd-app/)):**
- Site is hosted at <link>https://skylacrobinson.github.io/bbd-app/</link>
+**Live Demo at https://skylacrobinson.github.io/bbd-app/:**
+
 
 ### Features
 
