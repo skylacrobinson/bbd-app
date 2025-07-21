@@ -4,11 +4,14 @@
   "version": "0.0.0",
   "homepage": "https://skylacrobinson.github.io/bbd-app/",
   "source": "src/index.html",
+  "homepage":"https://skylacrobinson.github.io/bbd-app"
   "scripts": {
+
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "start": "parcel",
     "build": "parcel build src/index.html --public-url /bbd-app/ --no-optimize"
+
   },
   "dependencies": {
     "react": "^19.1.0",
