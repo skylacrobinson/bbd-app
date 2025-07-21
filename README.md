@@ -43,6 +43,8 @@ This project is a simplified feature implementation of a Disney+ style home page
 - 🚀 **Magical Animations:** Incorporates fun user animations to when interactions occur with tiles and modals.
 
 
+---
+
 ## Usage
 This app was built to only require keyboard in put. Some of the keyboard commands include:
 
