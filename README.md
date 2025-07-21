@@ -6,19 +6,18 @@
 
 # Disney Browser Based Device - Take Home Assignment
 
-<em>Transforming Ideas into Seamless Digital Experiences</em>
+<em>"The way to get started is to quit talking and begin doing." -Walt Disney</em>
 
 <!-- BADGES -->
 <img src="https://img.shields.io/github/languages/top/skylacrobinson/bbd-app?style=flat&color=0080ff" alt="repo-top-language">
 <img src="https://img.shields.io/github/languages/count/skylacrobinson/bbd-app?style=flat&color=0080ff" alt="repo-language-count">
 
-<em>Built with the tools and technologies:</em>
+<em>Built with these tools and technologies:</em>
 
 <img src="https://img.shields.io/badge/JSON-000000.svg?style=flat&logo=JSON&logoColor=white" alt="JSON">
-<img src="https://img.shields.io/badge/npm-CB3837.svg?style=flat&logo=npm&logoColor=white" alt="npm">
 <img src="https://img.shields.io/badge/TypeScript-3178C6.svg?style=flat&logo=TypeScript&logoColor=white" alt="TypeScript">
-<img src="https://img.shields.io/badge/react-%2320232a.svg?style=flat&logo=react&logoColor=%2361DAFB">
-<img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=flat&logo=html5&logoColor=white">
+<img src="https://img.shields.io/badge/react-%2320232a.svg?style=flat&logo=react&logoColor=%2361DAFB" alt="React">
+<img src="https://img.shields.io/badge/html5-%23E34F26.svg?style=flat&logo=html5&logoColor=white" alt="HTML 5">
 </div>
 <br>
 
