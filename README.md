@@ -15,6 +15,8 @@ This project is a simplified feature implementation of a Disney+ style home page
 <img src="https://img.shields.io/github/languages/count/skylacrobinson/bbd-app?style=flat&color=0080ff" alt="repo-language-count">
 
 <em>Built with these tools and technologies:</em>
+<br>
+
 <img src="https://img.shields.io/badge/JSON-000000.svg?style=flat&logo=JSON&logoColor=white" alt="JSON">
 <img src="https://img.shields.io/badge/TypeScript-3178C6.svg?style=flat&logo=TypeScript&logoColor=white" alt="TypeScript">
 <img src="https://img.shields.io/badge/react-%2320232a.svg?style=flat&logo=react&logoColor=%2361DAFB" alt="React">
