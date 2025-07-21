@@ -3,9 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "source": "src/index.html",
+  "homepage":"https://skylacrobinson.github.io/bbd-app"
   "scripts": {
-    "start": "parcel",
-    "build": "parcel build"
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d build",
+  "start": "parcel",
+  "build": "parcel build",
   },
   "dependencies": {
     "react": "^19.1.0",
