@@ -16109,7 +16109,7 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "App", ()=>App);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _appCss = require("./App.css");
-var _tileContext = require("./components/TileContext");
+var _tileContext = require("./context/TileContext");
 var _mainContent = require("./components/MainContent");
 var _mainContentDefault = parcelHelpers.interopDefault(_mainContent);
 var _useGetData = require("./hooks-utils/useGetData");
@@ -16154,120 +16154,722 @@ $RefreshReg$(_c, "App");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","./App.css":"6n0o6","./components/TileContext":"kfWiq","./components/MainContent":"f54z2","./hooks-utils/useGetData":"itwBn","./components/Instructions":"iC4ed","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"6n0o6":[function() {},{}],"kfWiq":[function(require,module,exports,__globalThis) {
-var $parcel$ReactRefreshHelpers$4300 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-$parcel$ReactRefreshHelpers$4300.init();
+},{"react/jsx-dev-runtime":"dVPUn","./App.css":"6n0o6","./components/MainContent":"f54z2","./hooks-utils/useGetData":"itwBn","./components/Instructions":"iC4ed","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./context/TileContext":"lHa1o"}],"6n0o6":[function() {},{}],"f54z2":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$764b = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$764b.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
 var prevRefreshSig = globalThis.$RefreshSig$;
-$parcel$ReactRefreshHelpers$4300.prelude(module);
+$parcel$ReactRefreshHelpers$764b.prelude(module);
 
 try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "useAppContext", ()=>useAppContext);
-parcelHelpers.export(exports, "AppProvider", ()=>AppProvider);
+parcelHelpers.export(exports, "default", ()=>MainContent);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _react = require("react");
-var _useGetData = require("../hooks-utils/useGetData");
-var _s = $RefreshSig$(), _s1 = $RefreshSig$();
-const AppContext = /*#__PURE__*/ (0, _react.createContext)(undefined);
-function useAppContext() {
+var _modalDetails = require("./ModalDetails");
+var _modalDetailsDefault = parcelHelpers.interopDefault(_modalDetails);
+var _tileRow = require("./TileRow");
+var _tileRowDefault = parcelHelpers.interopDefault(_tileRow);
+var _tileContext = require("../context/TileContext");
+var _s = $RefreshSig$();
+function MainContent() {
     _s();
-    const context = (0, _react.useContext)(AppContext);
-    if (!context) throw new Error("useAppContext must be used within an AppProvider");
-    return context;
+    const [open, setOpen] = (0, _react.useState)(false); //Manage modal open state
+    const { data, currentCollectionIndex, setCurrentCollectionIndex, currentTileIndex, setCurrentTileIndex, setCurrentTileData } = (0, _tileContext.useAppContext)();
+    const containerRef = (0, _react.useRef)(null); // Reference to the tile row container
+    const handleClose = ()=>{
+        // Close the modal and reset the current tile data and return focus to the current tile
+        setOpen(false);
+        setCurrentTileData(null);
+        const node = containerRef.current?.childNodes[currentTileIndex];
+        if (node) node.focus({
+            preventScroll: true
+        });
+    };
+    (0, _react.useEffect)(()=>{
+        // Add wheel event listener to the containerRef
+        // This prevents horizontal scrolling when using a mouse wheel or trackpad
+        const element = containerRef.current;
+        if (containerRef.current) element?.addEventListener('wheel', handleWheel, {
+            passive: false
+        });
+        return ()=>{
+            if (element) element.removeEventListener('wheel', handleWheel, false);
+        };
+    }, []);
+    (0, _react.useEffect)(()=>{
+        // Scroll to the current tile and focus tile when the currentTileIndex or currentCollectionIndex changes
+        (containerRef?.current?.childNodes?.[currentTileIndex]).scrollIntoView({
+            block: "nearest",
+            inline: "start",
+            behavior: "smooth"
+        });
+        (containerRef?.current?.childNodes?.[currentTileIndex]).focus({
+            preventScroll: true
+        });
+    }, [
+        currentTileIndex,
+        currentCollectionIndex
+    ]);
+    const collectionCount = data?.containers?.length ?? 0;
+    /**
+ * Handles horizontal keyboard navigation (Tab, ArrowRight, ArrowLeft) for a container of focusable tiles.
+ *
+ * - 'Tab': Prevents default tabbing and focuses the current tile without scrolling.
+ * - 'ArrowRight': Moves focus to the next tile, wrapping to the first tile if at the end.
+ * - 'ArrowLeft': Moves focus to the previous tile, wrapping to the last tile if at the beginning.
+ * 
+ *
+ * @param e - The keyboard event triggered on the container element.
+ */ const handleHorizontalPress = (e)=>{
+        if (containerRef.current?.childNodes) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                e.stopPropagation();
+                (containerRef?.current?.childNodes?.[currentTileIndex]).focus({
+                    preventScroll: true
+                });
+            }
+            if (e.key === "ArrowRight") {
+                e.preventDefault();
+                e.stopPropagation();
+                // If the current tile index is the last tile, wrap around to the first tile
+                // Otherwise, increment the index
+                // This allows for circular navigation through the tiles
+                if (currentTileIndex === containerRef?.current?.childNodes.length - 1) setCurrentTileIndex(0);
+                else setCurrentTileIndex((prev)=>prev + 1);
+            }
+            if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                e.stopPropagation();
+                // If the current tile index is 0, wrap around to the last tile
+                // Otherwise, decrement the index
+                // This allows for circular navigation through the tiles
+                if (currentTileIndex === 0) setCurrentTileIndex(containerRef?.current?.childNodes.length - 1);
+                else setCurrentTileIndex((prev)=>prev - 1);
+            }
+            if (e.key === "ArrowRight" || e.key === "ArrowLeft") e.preventDefault();
+        }
+    };
+    /**
+   * Handles vertical keyboard navigation and actions within a view element.
+   * 
+   * This function listens for specific key events (`ArrowDown`, `ArrowUp`, and spacebar)
+   * and updates the current collection and tile indices accordingly. It also triggers
+   * a view transition using the `startViewTransition` API if available.
+   *
+   * - `ArrowDown`: Moves to the next collection, wrapping to the first if at the end.
+   * - `ArrowUp`: Moves to the previous collection, wrapping to the last if at the start.
+   * - `Spacebar`: Opens a modal or dialog by setting `open` to true and stops event propagation.
+   *
+   * @param e - The keyboard event triggered on a div element.
+   */ const handleVerticalPress = (e)=>{
+        const viewElement = document.querySelector('.view');
+        if (viewElement && document.startViewTransition) document.startViewTransition({
+            update: ()=>{
+                if (e.key === 'ArrowDown') {
+                    if (currentCollectionIndex === collectionCount - 1) setCurrentCollectionIndex(0);
+                    else setCurrentCollectionIndex((prev)=>prev + 1);
+                    setCurrentTileIndex(0);
+                }
+                if (e.key === 'ArrowUp') {
+                    if (currentCollectionIndex === 0 || currentCollectionIndex === -1) setCurrentCollectionIndex(collectionCount - 1);
+                    else setCurrentCollectionIndex((prev)=>prev - 1);
+                    setCurrentTileIndex(0);
+                }
+                if (e.key === ' ') {
+                    e.stopPropagation();
+                    setOpen(true);
+                }
+            },
+            types: [
+                'none',
+                e.key
+            ]
+        });
+    };
+    /**
+ * Handles the wheel event and prevents the default horizontal scroll behavior
+ * when a horizontal scroll (deltaX) is detected.
+ *
+ * @param e - The event object, expected to be a WheelEvent.
+ */ const handleWheel = (e)=>{
+        const wheelEvent = e;
+        if (wheelEvent.deltaX !== 0) wheelEvent.preventDefault();
+    };
+    /**
+   * Handles key press events on a div element, delegating to horizontal or vertical
+   * press handlers based on the key pressed.
+   *
+   * - For "ArrowLeft", "ArrowRight", or "Tab" keys, calls `handleHorizontalPress`.
+   * - For "ArrowDown", "ArrowUp", or space (" ") keys, calls `handleVerticalPress`.
+   *
+   * @param e - The keyboard event triggered by a key press on the div element.
+   */ const handleKeyPress = (e)=>{
+        if (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "Tab") handleHorizontalPress(e);
+        if (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === " ") handleVerticalPress(e);
+        return;
+    };
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Fragment), {
+        children: [
+            open && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _modalDetailsDefault.default), {
+                open: open,
+                onClose: handleClose
+            }, void 0, false, {
+                fileName: "src/components/MainContent.tsx",
+                lineNumber: 225,
+                columnNumber: 17
+            }, this),
+            " ",
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "view",
+                onMouseDown: (e)=>{
+                    e.preventDefault();
+                },
+                children: [
+                    " ",
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h4", {
+                        className: "collection-title",
+                        children: [
+                            " ",
+                            data?.containers?.[currentCollectionIndex]?.set?.text?.title?.full?.set?.default?.content
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/MainContent.tsx",
+                        lineNumber: 227,
+                        columnNumber: 13
+                    }, this),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                        className: "tile-row",
+                        ref: containerRef,
+                        role: "generic",
+                        onKeyUp: handleKeyPress,
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _tileRowDefault.default), {}, void 0, false, {
+                            fileName: "src/components/MainContent.tsx",
+                            lineNumber: 229,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "src/components/MainContent.tsx",
+                        lineNumber: 228,
+                        columnNumber: 7
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/MainContent.tsx",
+                lineNumber: 226,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "src/components/MainContent.tsx",
+        lineNumber: 224,
+        columnNumber: 5
+    }, this);
 }
-_s(useAppContext, "b9L3QQ+jgeyIrH0NfHrJ8nn7VMU=");
-const AppProvider = ({ children })=>{
-    _s1();
-    const [currentTileIndex, setCurrentTileIndex] = (0, _react.useState)(0);
-    const [currentTileData, setCurrentTileData] = (0, _react.useState)(null);
-    const [currentCollectionIndex, setCurrentCollectionIndex] = (0, _react.useState)(0);
-    const [currentCollectionData, setCurrentCollectionData] = (0, _react.useState)(null);
-    const data = (0, _useGetData.useGetData)().data;
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(AppContext.Provider, {
-        value: {
-            data,
-            currentTileIndex,
-            setCurrentTileIndex,
-            currentTileData,
-            setCurrentTileData,
-            currentCollectionIndex,
-            setCurrentCollectionIndex,
-            currentCollectionData,
-            setCurrentCollectionData
-        },
-        children: children
-    }, void 0, false, {
-        fileName: "src/components/TileContext.tsx",
-        lineNumber: 40,
-        columnNumber: 9
-    }, undefined);
-};
-_s1(AppProvider, "O0Hs45jocMmyraiqgEX8sVUdtMA=", false, function() {
+_s(MainContent, "juY5f/XGU6heOU/8PxvSQH4xZKI=", false, function() {
     return [
-        (0, _useGetData.useGetData)
+        (0, _tileContext.useAppContext)
     ];
 });
-_c = AppProvider;
+_c = MainContent;
 var _c;
-$RefreshReg$(_c, "AppProvider");
+$RefreshReg$(_c, "MainContent");
 
-  $parcel$ReactRefreshHelpers$4300.postlude(module);
+  $parcel$ReactRefreshHelpers$764b.postlude(module);
 } finally {
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","../hooks-utils/useGetData":"itwBn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"itwBn":[function(require,module,exports,__globalThis) {
-var $parcel$ReactRefreshHelpers$0261 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-$parcel$ReactRefreshHelpers$0261.init();
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./ModalDetails":"f9Zvu","./TileRow":"jF58x","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/TileContext":"lHa1o"}],"f9Zvu":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$eaa4 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$eaa4.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
 var prevRefreshSig = globalThis.$RefreshSig$;
-$parcel$ReactRefreshHelpers$0261.prelude(module);
+$parcel$ReactRefreshHelpers$eaa4.prelude(module);
 
 try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "useGetData", ()=>useGetData);
+parcelHelpers.export(exports, "default", ()=>ModalDetails);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _backgroundDetails = require("./BackgroundDetails");
+var _backgroundDetailsDefault = parcelHelpers.interopDefault(_backgroundDetails);
+var _tileContext = require("../context/TileContext");
+var _chipDetails = require("./ChipDetails");
+var _chipDetailsDefault = parcelHelpers.interopDefault(_chipDetails);
+var _useFocusTrap = require("../hooks-utils/useFocusTrap");
+var _useFocusTrapDefault = parcelHelpers.interopDefault(_useFocusTrap);
 var _s = $RefreshSig$();
-const url = 'https://cd-static.bamgrid.com/dp-7068675309/home.json';
-const useGetData = ()=>{
+function ModalDetails({ open, onClose }) {
     _s();
-    const [data, setData] = (0, _react.useState)();
-    const [loading, setLoading] = (0, _react.useState)(true);
-    const [error, setError] = (0, _react.useState)(null);
-    (0, _react.useEffect)(()=>{
-        async function getData() {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`Response status: ${response.status}`);
-                const json = await response.json();
-                setData(json.data.StandardCollection);
-            // return json.data.StandardCollection as Response;
-            } catch (error) {
-                console.error(error);
-                setError('An error occured.');
-            } finally{
-                setLoading(false);
-            }
-        }
-        getData();
-    }, []);
-    return {
-        data,
-        loading,
-        error
+    const { data, currentCollectionIndex, currentTileIndex } = (0, _tileContext.useAppContext)();
+    const tileData = data && data.containers[currentCollectionIndex].set.items[currentTileIndex];
+    const focusRef = (0, _react.useRef)(null);
+    const handleClose = (e)=>{
+        open;
+        if (e.key === 'Escape') onClose();
+        else if (e.key === 'Enter') e.stopPropagation();
     };
-};
-_s(useGetData, "Fc++DvcSUDM3/vBA98cprlVWLM0=");
+    (0, _react.useEffect)(()=>{
+        if (open) {
+            focusRef.current?.focus();
+            (0, _useFocusTrapDefault.default)();
+        }
+    }, [
+        open
+    ]);
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "modal-overlay",
+        onKeyDown: handleClose,
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+            className: "modal-background",
+            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "modal",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                        className: "modal-button",
+                        onClick: onClose,
+                        onKeyDown: handleClose,
+                        ref: focusRef,
+                        tabIndex: 0,
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("svg", {
+                                        viewBox: "0 0 24 24",
+                                        xmlns: "http://www.w3.org/2000/svg",
+                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("path", {
+                                            d: "M15 18l-6-6 6-6",
+                                            stroke: "white",
+                                            strokeWidth: "2",
+                                            strokeLinecap: "round",
+                                            strokeLinejoin: "round",
+                                            fill: "none"
+                                        }, void 0, false, {
+                                            fileName: "src/components/ModalDetails.tsx",
+                                            lineNumber: 65,
+                                            columnNumber: 33
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "src/components/ModalDetails.tsx",
+                                        lineNumber: 64,
+                                        columnNumber: 29
+                                    }, this),
+                                    " "
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/components/ModalDetails.tsx",
+                                lineNumber: 63,
+                                columnNumber: 25
+                            }, this),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                children: "Back"
+                            }, void 0, false, {
+                                fileName: "src/components/ModalDetails.tsx",
+                                lineNumber: 68,
+                                columnNumber: 25
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/ModalDetails.tsx",
+                        lineNumber: 62,
+                        columnNumber: 21
+                    }, this),
+                    tileData && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Fragment), {
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _backgroundDetailsDefault.default), {
+                                data: tileData
+                            }, void 0, false, {
+                                fileName: "src/components/ModalDetails.tsx",
+                                lineNumber: 73,
+                                columnNumber: 29
+                            }, this),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _chipDetailsDefault.default), {
+                                data: tileData
+                            }, void 0, false, {
+                                fileName: "src/components/ModalDetails.tsx",
+                                lineNumber: 74,
+                                columnNumber: 29
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/ModalDetails.tsx",
+                        lineNumber: 72,
+                        columnNumber: 25
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/ModalDetails.tsx",
+                lineNumber: 61,
+                columnNumber: 17
+            }, this)
+        }, void 0, false, {
+            fileName: "src/components/ModalDetails.tsx",
+            lineNumber: 60,
+            columnNumber: 13
+        }, this)
+    }, void 0, false, {
+        fileName: "src/components/ModalDetails.tsx",
+        lineNumber: 59,
+        columnNumber: 9
+    }, this);
+}
+_s(ModalDetails, "pzoJUfypnwufm7O+Korcgs9rE0A=", false, function() {
+    return [
+        (0, _tileContext.useAppContext)
+    ];
+});
+_c = ModalDetails;
+var _c;
+$RefreshReg$(_c, "ModalDetails");
 
-  $parcel$ReactRefreshHelpers$0261.postlude(module);
+  $parcel$ReactRefreshHelpers$eaa4.postlude(module);
 } finally {
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"jnFvT":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./BackgroundDetails":"89XJW","./ChipDetails":"cT7kZ","../hooks-utils/useFocusTrap":"cpC3Z","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/TileContext":"lHa1o"}],"89XJW":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$863a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$863a.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$863a.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>BackgroundDetails);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _jsxRuntime = require("react/jsx-runtime");
+var _useGetDisplay = require("../hooks-utils/useGetDisplay");
+var _useConvertToPNG = require("../hooks-utils/useConvertToPNG");
+var _useConvertToPNGDefault = parcelHelpers.interopDefault(_useConvertToPNG);
+var _tileImage = require("./TileImage");
+var _s = $RefreshSig$();
+function BackgroundDetails({ data }) {
+    _s();
+    const { backgroundDetails, titleLayer, titleText } = (0, _useGetDisplay.useGetDisplay)(data.image, data.text); // Retrieves the necessary display content like background image and title text
+    const titlePNG = (0, _useConvertToPNGDefault.default)(titleLayer); // converts the title treatment URL to return PNG instead of JPEG
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "background-details",
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+            className: "background-container",
+            children: backgroundDetails ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxRuntime.Fragment), {
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _tileImage.TileImage), {
+                        src: backgroundDetails,
+                        alt: `${titleText ?? "Untitled"} background image`,
+                        className: "background-image"
+                    }, void 0, false, {
+                        fileName: "src/components/BackgroundDetails.tsx",
+                        lineNumber: 27,
+                        columnNumber: 15
+                    }, this),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                        className: "background-title-container",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _tileImage.TileImage), {
+                            src: titlePNG || titleLayer,
+                            alt: `${titleText ?? "Untitled"} title treatment`,
+                            className: "background-title",
+                            text: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
+                                children: titleText ?? "Untitled"
+                            }, void 0, false, {
+                                fileName: "src/components/BackgroundDetails.tsx",
+                                lineNumber: 38,
+                                columnNumber: 25
+                            }, void 0)
+                        }, void 0, false, {
+                            fileName: "src/components/BackgroundDetails.tsx",
+                            lineNumber: 34,
+                            columnNumber: 17
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "src/components/BackgroundDetails.tsx",
+                        lineNumber: 33,
+                        columnNumber: 15
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/BackgroundDetails.tsx",
+                lineNumber: 26,
+                columnNumber: 13
+            }, this) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {}, void 0, false, {
+                fileName: "src/components/BackgroundDetails.tsx",
+                lineNumber: 43,
+                columnNumber: 13
+            }, this)
+        }, void 0, false, {
+            fileName: "src/components/BackgroundDetails.tsx",
+            lineNumber: 24,
+            columnNumber: 9
+        }, this)
+    }, void 0, false, {
+        fileName: "src/components/BackgroundDetails.tsx",
+        lineNumber: 23,
+        columnNumber: 7
+    }, this);
+}
+_s(BackgroundDetails, "ZoBzWPKVoiHMutKN1MIwXjgZsiM=", false, function() {
+    return [
+        (0, _useGetDisplay.useGetDisplay),
+        (0, _useConvertToPNGDefault.default)
+    ];
+});
+_c = BackgroundDetails;
+var _c;
+$RefreshReg$(_c, "BackgroundDetails");
+
+  $parcel$ReactRefreshHelpers$863a.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","react/jsx-runtime":"05iiF","../hooks-utils/useGetDisplay":"bTT0Y","../hooks-utils/useConvertToPNG":"6Y9ms","./TileImage":"jOUIX","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"05iiF":[function(require,module,exports,__globalThis) {
+'use strict';
+module.exports = require("c4c10cbba9862d5f");
+
+},{"c4c10cbba9862d5f":"gKzlX"}],"gKzlX":[function(require,module,exports,__globalThis) {
+/**
+ * @license React
+ * react-jsx-runtime.development.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */ "use strict";
+(function() {
+    function getComponentNameFromType(type) {
+        if (null == type) return null;
+        if ("function" === typeof type) return type.$$typeof === REACT_CLIENT_REFERENCE ? null : type.displayName || type.name || null;
+        if ("string" === typeof type) return type;
+        switch(type){
+            case REACT_FRAGMENT_TYPE:
+                return "Fragment";
+            case REACT_PROFILER_TYPE:
+                return "Profiler";
+            case REACT_STRICT_MODE_TYPE:
+                return "StrictMode";
+            case REACT_SUSPENSE_TYPE:
+                return "Suspense";
+            case REACT_SUSPENSE_LIST_TYPE:
+                return "SuspenseList";
+            case REACT_ACTIVITY_TYPE:
+                return "Activity";
+        }
+        if ("object" === typeof type) switch("number" === typeof type.tag && console.error("Received an unexpected object in getComponentNameFromType(). This is likely a bug in React. Please file an issue."), type.$$typeof){
+            case REACT_PORTAL_TYPE:
+                return "Portal";
+            case REACT_CONTEXT_TYPE:
+                return (type.displayName || "Context") + ".Provider";
+            case REACT_CONSUMER_TYPE:
+                return (type._context.displayName || "Context") + ".Consumer";
+            case REACT_FORWARD_REF_TYPE:
+                var innerType = type.render;
+                type = type.displayName;
+                type || (type = innerType.displayName || innerType.name || "", type = "" !== type ? "ForwardRef(" + type + ")" : "ForwardRef");
+                return type;
+            case REACT_MEMO_TYPE:
+                return innerType = type.displayName || null, null !== innerType ? innerType : getComponentNameFromType(type.type) || "Memo";
+            case REACT_LAZY_TYPE:
+                innerType = type._payload;
+                type = type._init;
+                try {
+                    return getComponentNameFromType(type(innerType));
+                } catch (x) {}
+        }
+        return null;
+    }
+    function testStringCoercion(value) {
+        return "" + value;
+    }
+    function checkKeyStringCoercion(value) {
+        try {
+            testStringCoercion(value);
+            var JSCompiler_inline_result = !1;
+        } catch (e) {
+            JSCompiler_inline_result = !0;
+        }
+        if (JSCompiler_inline_result) {
+            JSCompiler_inline_result = console;
+            var JSCompiler_temp_const = JSCompiler_inline_result.error;
+            var JSCompiler_inline_result$jscomp$0 = "function" === typeof Symbol && Symbol.toStringTag && value[Symbol.toStringTag] || value.constructor.name || "Object";
+            JSCompiler_temp_const.call(JSCompiler_inline_result, "The provided key is an unsupported type %s. This value must be coerced to a string before using it here.", JSCompiler_inline_result$jscomp$0);
+            return testStringCoercion(value);
+        }
+    }
+    function getTaskName(type) {
+        if (type === REACT_FRAGMENT_TYPE) return "<>";
+        if ("object" === typeof type && null !== type && type.$$typeof === REACT_LAZY_TYPE) return "<...>";
+        try {
+            var name = getComponentNameFromType(type);
+            return name ? "<" + name + ">" : "<...>";
+        } catch (x) {
+            return "<...>";
+        }
+    }
+    function getOwner() {
+        var dispatcher = ReactSharedInternals.A;
+        return null === dispatcher ? null : dispatcher.getOwner();
+    }
+    function UnknownOwner() {
+        return Error("react-stack-top-frame");
+    }
+    function hasValidKey(config) {
+        if (hasOwnProperty.call(config, "key")) {
+            var getter = Object.getOwnPropertyDescriptor(config, "key").get;
+            if (getter && getter.isReactWarning) return !1;
+        }
+        return void 0 !== config.key;
+    }
+    function defineKeyPropWarningGetter(props, displayName) {
+        function warnAboutAccessingKey() {
+            specialPropKeyWarningShown || (specialPropKeyWarningShown = !0, console.error("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)", displayName));
+        }
+        warnAboutAccessingKey.isReactWarning = !0;
+        Object.defineProperty(props, "key", {
+            get: warnAboutAccessingKey,
+            configurable: !0
+        });
+    }
+    function elementRefGetterWithDeprecationWarning() {
+        var componentName = getComponentNameFromType(this.type);
+        didWarnAboutElementRef[componentName] || (didWarnAboutElementRef[componentName] = !0, console.error("Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."));
+        componentName = this.props.ref;
+        return void 0 !== componentName ? componentName : null;
+    }
+    function ReactElement(type, key, self, source, owner, props, debugStack, debugTask) {
+        self = props.ref;
+        type = {
+            $$typeof: REACT_ELEMENT_TYPE,
+            type: type,
+            key: key,
+            props: props,
+            _owner: owner
+        };
+        null !== (void 0 !== self ? self : null) ? Object.defineProperty(type, "ref", {
+            enumerable: !1,
+            get: elementRefGetterWithDeprecationWarning
+        }) : Object.defineProperty(type, "ref", {
+            enumerable: !1,
+            value: null
+        });
+        type._store = {};
+        Object.defineProperty(type._store, "validated", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: 0
+        });
+        Object.defineProperty(type, "_debugInfo", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: null
+        });
+        Object.defineProperty(type, "_debugStack", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: debugStack
+        });
+        Object.defineProperty(type, "_debugTask", {
+            configurable: !1,
+            enumerable: !1,
+            writable: !0,
+            value: debugTask
+        });
+        Object.freeze && (Object.freeze(type.props), Object.freeze(type));
+        return type;
+    }
+    function jsxDEVImpl(type, config, maybeKey, isStaticChildren, source, self, debugStack, debugTask) {
+        var children = config.children;
+        if (void 0 !== children) {
+            if (isStaticChildren) {
+                if (isArrayImpl(children)) {
+                    for(isStaticChildren = 0; isStaticChildren < children.length; isStaticChildren++)validateChildKeys(children[isStaticChildren]);
+                    Object.freeze && Object.freeze(children);
+                } else console.error("React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead.");
+            } else validateChildKeys(children);
+        }
+        if (hasOwnProperty.call(config, "key")) {
+            children = getComponentNameFromType(type);
+            var keys = Object.keys(config).filter(function(k) {
+                return "key" !== k;
+            });
+            isStaticChildren = 0 < keys.length ? "{key: someKey, " + keys.join(": ..., ") + ": ...}" : "{key: someKey}";
+            didWarnAboutKeySpread[children + isStaticChildren] || (keys = 0 < keys.length ? "{" + keys.join(": ..., ") + ": ...}" : "{}", console.error('A props object containing a "key" prop is being spread into JSX:\n  let props = %s;\n  <%s {...props} />\nReact keys must be passed directly to JSX without using spread:\n  let props = %s;\n  <%s key={someKey} {...props} />', isStaticChildren, children, keys, children), didWarnAboutKeySpread[children + isStaticChildren] = !0);
+        }
+        children = null;
+        void 0 !== maybeKey && (checkKeyStringCoercion(maybeKey), children = "" + maybeKey);
+        hasValidKey(config) && (checkKeyStringCoercion(config.key), children = "" + config.key);
+        if ("key" in config) {
+            maybeKey = {};
+            for(var propName in config)"key" !== propName && (maybeKey[propName] = config[propName]);
+        } else maybeKey = config;
+        children && defineKeyPropWarningGetter(maybeKey, "function" === typeof type ? type.displayName || type.name || "Unknown" : type);
+        return ReactElement(type, children, self, source, getOwner(), maybeKey, debugStack, debugTask);
+    }
+    function validateChildKeys(node) {
+        "object" === typeof node && null !== node && node.$$typeof === REACT_ELEMENT_TYPE && node._store && (node._store.validated = 1);
+    }
+    var React = require("593632ccebda0d3a"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler");
+    Symbol.for("react.provider");
+    var REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
+        return null;
+    };
+    React = {
+        "react-stack-bottom-frame": function(callStackForError) {
+            return callStackForError();
+        }
+    };
+    var specialPropKeyWarningShown;
+    var didWarnAboutElementRef = {};
+    var unknownOwnerDebugStack = React["react-stack-bottom-frame"].bind(React, UnknownOwner)();
+    var unknownOwnerDebugTask = createTask(getTaskName(UnknownOwner));
+    var didWarnAboutKeySpread = {};
+    exports.Fragment = REACT_FRAGMENT_TYPE;
+    exports.jsx = function(type, config, maybeKey, source, self) {
+        var trackActualOwner = 1e4 > ReactSharedInternals.recentlyCreatedOwnerStacks++;
+        return jsxDEVImpl(type, config, maybeKey, !1, source, self, trackActualOwner ? Error("react-stack-top-frame") : unknownOwnerDebugStack, trackActualOwner ? createTask(getTaskName(type)) : unknownOwnerDebugTask);
+    };
+    exports.jsxs = function(type, config, maybeKey, source, self) {
+        var trackActualOwner = 1e4 > ReactSharedInternals.recentlyCreatedOwnerStacks++;
+        return jsxDEVImpl(type, config, maybeKey, !0, source, self, trackActualOwner ? Error("react-stack-top-frame") : unknownOwnerDebugStack, trackActualOwner ? createTask(getTaskName(type)) : unknownOwnerDebugTask);
+    };
+})();
+
+},{"593632ccebda0d3a":"jMk1U"}],"bTT0Y":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useGetDisplay", ()=>useGetDisplay);
+const aspectRatio = 1.78; // Default aspect ratio
+function useGetDisplay(image, text) {
+    // Retrieves the display content, including background image, title text, and tile image.
+    const sizes = Object.keys(image.tile || {});
+    const firstSize = sizes[0];
+    const contentType = Object.keys(image.tile[firstSize] || {})[0];
+    const overlayType = contentType === 'collection' || contentType === 'default' ? 'logo_layer' : 'title_treatment';
+    const tileImage = image.tile[aspectRatio || firstSize][contentType]?.default?.url || '';
+    const backgroundDetails = image?.background_details?.[aspectRatio]?.[contentType]?.default?.url || image?.background?.[aspectRatio]?.[contentType]?.default?.url || image?.hero_collection?.[aspectRatio]?.[contentType]?.default?.url || ''; // Fallback to the first available background image if specific details are not found
+    const titleText = text?.title?.full?.[contentType]?.default?.content || text?.title?.full?.collection?.default?.content || '';
+    const titleLayer = image?.[overlayType]?.[aspectRatio]?.[contentType]?.default?.url || image?.logo?.['2.00']?.[contentType]?.default?.url || '';
+    return {
+        firstSize,
+        contentType,
+        sizes,
+        backgroundDetails,
+        tileImage,
+        titleLayer,
+        titleText
+    };
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jnFvT":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -16297,7 +16899,113 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"7h6Pi":[function(require,module,exports,__globalThis) {
+},{}],"6Y9ms":[function(require,module,exports,__globalThis) {
+// Converts a given link to a PNG format by appending the appropriate query parameter.
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>useConvertToPNG);
+function useConvertToPNG(link) {
+    if (link) {
+        const url = new URL(link);
+        const urlParams = new URLSearchParams(url.search);
+        urlParams.set('format', 'png');
+        const newUrl = `${url.origin}${url.pathname}?${urlParams.toString()}`;
+        return newUrl;
+    }
+    return;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jOUIX":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$9950 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$9950.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$9950.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+/**
+ * Renders an image with error handling and fallback support.
+ *
+ * The `TileImage` component attempts to display an image from the provided `src`.
+ * If the image fails to load, it displays a fallback element or a default placeholder with optional text.
+ * The error state resets whenever the `src` prop changes.
+ *
+ * @param src - The source URL of the image.
+ * @param alt - The alt text for the image.
+ * @param fallback - Optional React node to display if the image fails to load.
+ * @param text - Optional text to display in the default fallback placeholder.
+ * @param props - Additional props to pass to the underlying `<img>` element.
+ *
+ * @returns The image element, a fallback, or a default placeholder if loading fails.
+ */ parcelHelpers.export(exports, "TileImage", ()=>TileImage);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _s = $RefreshSig$();
+function DefaultFallback({ children }) {
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "image-placeholder",
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+            className: "image-placeholder-text",
+            children: children
+        }, void 0, false, {
+            fileName: "src/components/TileImage.tsx",
+            lineNumber: 13,
+            columnNumber: 13
+        }, this)
+    }, void 0, false, {
+        fileName: "src/components/TileImage.tsx",
+        lineNumber: 12,
+        columnNumber: 9
+    }, this);
+}
+_c = DefaultFallback;
+function TileImage({ src, alt, fallback, text, ...props }) {
+    _s();
+    const [hasError, setHasError] = (0, _react.useState)(false);
+    (0, _react.useEffect)(()=>{
+        //Detects if source has changed and resets the error state
+        setHasError(false);
+    }, [
+        src
+    ]);
+    if (hasError) // If there is an error loading the image, return the fallback or a default placeholder
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
+        children: fallback || /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(DefaultFallback, {
+            children: text
+        }, void 0, false, {
+            fileName: "src/components/TileImage.tsx",
+            lineNumber: 45,
+            columnNumber: 5
+        }, this)
+    }, void 0, false);
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+        src: src,
+        alt: alt,
+        onError: ()=>{
+            setHasError(true);
+        },
+        ...props
+    }, src, false, {
+        fileName: "src/components/TileImage.tsx",
+        lineNumber: 49,
+        columnNumber: 5
+    }, this);
+}
+_s(TileImage, "Y10BwSn8jQ4wQtRAtRxoscEk2KA=");
+_c1 = TileImage;
+var _c, _c1;
+$RefreshReg$(_c, "DefaultFallback");
+$RefreshReg$(_c1, "TileImage");
+
+  $parcel$ReactRefreshHelpers$9950.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"7h6Pi":[function(require,module,exports,__globalThis) {
 "use strict";
 var Refresh = require("7422ead32dcc1e6b");
 function debounce(func, delay) {
@@ -18575,828 +19283,7 @@ function $da9882e673ac146b$var$ErrorOverlay() {
     return null;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"f54z2":[function(require,module,exports,__globalThis) {
-var $parcel$ReactRefreshHelpers$764b = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-$parcel$ReactRefreshHelpers$764b.init();
-var prevRefreshReg = globalThis.$RefreshReg$;
-var prevRefreshSig = globalThis.$RefreshSig$;
-$parcel$ReactRefreshHelpers$764b.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>MainContent);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-var _react = require("react");
-var _modalDetails = require("./ModalDetails");
-var _modalDetailsDefault = parcelHelpers.interopDefault(_modalDetails);
-var _tileRow = require("./TileRow");
-var _tileRowDefault = parcelHelpers.interopDefault(_tileRow);
-var _tileContext = require("./TileContext");
-var _s = $RefreshSig$();
-function MainContent() {
-    _s();
-    const [open, setOpen] = (0, _react.useState)(false); //Manage modal open state
-    const { data, currentCollectionIndex, setCurrentCollectionIndex, currentTileIndex, setCurrentTileIndex, setCurrentTileData } = (0, _tileContext.useAppContext)();
-    const containerRef = (0, _react.useRef)(null); // Reference to the tile row container
-    const handleClose = ()=>{
-        // Close the modal and reset the current tile data and return focus to the current tile
-        setOpen(false);
-        setCurrentTileData(null);
-        const node = containerRef.current?.childNodes[currentTileIndex];
-        if (node) node.focus({
-            preventScroll: true
-        });
-    };
-    (0, _react.useEffect)(()=>{
-        // Add wheel event listener to the containerRef
-        // This prevents horizontal scrolling when using a mouse wheel or trackpad
-        const element = containerRef.current;
-        if (containerRef.current) element?.addEventListener('wheel', handleWheel, {
-            passive: false
-        });
-        return ()=>{
-            if (element) element.removeEventListener('wheel', handleWheel, false);
-        };
-    }, []);
-    (0, _react.useEffect)(()=>{
-        // Scroll to the current tile and focus tile when the currentTileIndex or currentCollectionIndex changes
-        (containerRef?.current?.childNodes?.[currentTileIndex]).scrollIntoView({
-            block: "nearest",
-            inline: "start",
-            behavior: "smooth"
-        });
-        (containerRef?.current?.childNodes?.[currentTileIndex]).focus({
-            preventScroll: true
-        });
-    }, [
-        currentTileIndex,
-        currentCollectionIndex
-    ]);
-    const collectionCount = data?.containers?.length ?? 0;
-    /**
- * Handles horizontal keyboard navigation (Tab, ArrowRight, ArrowLeft) for a container of focusable tiles.
- *
- * - 'Tab': Prevents default tabbing and focuses the current tile without scrolling.
- * - 'ArrowRight': Moves focus to the next tile, wrapping to the first tile if at the end.
- * - 'ArrowLeft': Moves focus to the previous tile, wrapping to the last tile if at the beginning.
- * 
- *
- * @param e - The keyboard event triggered on the container element.
- */ const handleHorizontalPress = (e)=>{
-        if (containerRef.current?.childNodes) {
-            if (e.key === 'Tab') {
-                e.preventDefault();
-                e.stopPropagation();
-                (containerRef?.current?.childNodes?.[currentTileIndex]).focus({
-                    preventScroll: true
-                });
-            }
-            if (e.key === "ArrowRight") {
-                e.preventDefault();
-                e.stopPropagation();
-                // If the current tile index is the last tile, wrap around to the first tile
-                // Otherwise, increment the index
-                // This allows for circular navigation through the tiles
-                if (currentTileIndex === containerRef?.current?.childNodes.length - 1) setCurrentTileIndex(0);
-                else setCurrentTileIndex((prev)=>prev + 1);
-            }
-            if (e.key === "ArrowLeft") {
-                e.preventDefault();
-                e.stopPropagation();
-                // If the current tile index is 0, wrap around to the last tile
-                // Otherwise, decrement the index
-                // This allows for circular navigation through the tiles
-                if (currentTileIndex === 0) setCurrentTileIndex(containerRef?.current?.childNodes.length - 1);
-                else setCurrentTileIndex((prev)=>prev - 1);
-            }
-            if (e.key === "ArrowRight" || e.key === "ArrowLeft") e.preventDefault();
-        }
-    };
-    /**
-   * Handles vertical keyboard navigation and actions within a view element.
-   * 
-   * This function listens for specific key events (`ArrowDown`, `ArrowUp`, and spacebar)
-   * and updates the current collection and tile indices accordingly. It also triggers
-   * a view transition using the `startViewTransition` API if available.
-   *
-   * - `ArrowDown`: Moves to the next collection, wrapping to the first if at the end.
-   * - `ArrowUp`: Moves to the previous collection, wrapping to the last if at the start.
-   * - `Spacebar`: Opens a modal or dialog by setting `open` to true and stops event propagation.
-   *
-   * @param e - The keyboard event triggered on a div element.
-   */ const handleVerticalPress = (e)=>{
-        const viewElement = document.querySelector('.view');
-        if (viewElement && document.startViewTransition) document.startViewTransition({
-            update: ()=>{
-                if (e.key === 'ArrowDown') {
-                    if (currentCollectionIndex === collectionCount - 1) setCurrentCollectionIndex(0);
-                    else setCurrentCollectionIndex((prev)=>prev + 1);
-                    setCurrentTileIndex(0);
-                }
-                if (e.key === 'ArrowUp') {
-                    if (currentCollectionIndex === 0 || currentCollectionIndex === -1) setCurrentCollectionIndex(collectionCount - 1);
-                    else setCurrentCollectionIndex((prev)=>prev - 1);
-                    setCurrentTileIndex(0);
-                }
-                if (e.key === ' ') {
-                    e.stopPropagation();
-                    setOpen(true);
-                }
-            },
-            types: [
-                'none',
-                e.key
-            ]
-        });
-    };
-    /**
- * Handles the wheel event and prevents the default horizontal scroll behavior
- * when a horizontal scroll (deltaX) is detected.
- *
- * @param e - The event object, expected to be a WheelEvent.
- */ const handleWheel = (e)=>{
-        const wheelEvent = e;
-        if (wheelEvent.deltaX !== 0) wheelEvent.preventDefault();
-    };
-    /**
-   * Handles key press events on a div element, delegating to horizontal or vertical
-   * press handlers based on the key pressed.
-   *
-   * - For "ArrowLeft", "ArrowRight", or "Tab" keys, calls `handleHorizontalPress`.
-   * - For "ArrowDown", "ArrowUp", or space (" ") keys, calls `handleVerticalPress`.
-   *
-   * @param e - The keyboard event triggered by a key press on the div element.
-   */ const handleKeyPress = (e)=>{
-        if (e.key === "ArrowLeft" || e.key === "ArrowRight" || e.key === "Tab") handleHorizontalPress(e);
-        if (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === " ") handleVerticalPress(e);
-        return;
-    };
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Fragment), {
-        children: [
-            open && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _modalDetailsDefault.default), {
-                open: open,
-                onClose: handleClose
-            }, void 0, false, {
-                fileName: "src/components/MainContent.tsx",
-                lineNumber: 225,
-                columnNumber: 17
-            }, this),
-            " ",
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "view",
-                onMouseDown: (e)=>{
-                    e.preventDefault();
-                },
-                children: [
-                    " ",
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h4", {
-                        className: "collection-title",
-                        children: [
-                            " ",
-                            data?.containers?.[currentCollectionIndex]?.set?.text?.title?.full?.set?.default?.content
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/components/MainContent.tsx",
-                        lineNumber: 227,
-                        columnNumber: 13
-                    }, this),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "tile-row",
-                        ref: containerRef,
-                        role: "generic",
-                        onKeyUp: handleKeyPress,
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _tileRowDefault.default), {}, void 0, false, {
-                            fileName: "src/components/MainContent.tsx",
-                            lineNumber: 229,
-                            columnNumber: 11
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "src/components/MainContent.tsx",
-                        lineNumber: 228,
-                        columnNumber: 7
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "src/components/MainContent.tsx",
-                lineNumber: 226,
-                columnNumber: 7
-            }, this)
-        ]
-    }, void 0, true, {
-        fileName: "src/components/MainContent.tsx",
-        lineNumber: 224,
-        columnNumber: 5
-    }, this);
-}
-_s(MainContent, "juY5f/XGU6heOU/8PxvSQH4xZKI=", false, function() {
-    return [
-        (0, _tileContext.useAppContext)
-    ];
-});
-_c = MainContent;
-var _c;
-$RefreshReg$(_c, "MainContent");
-
-  $parcel$ReactRefreshHelpers$764b.postlude(module);
-} finally {
-  globalThis.$RefreshReg$ = prevRefreshReg;
-  globalThis.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./ModalDetails":"f9Zvu","./TileRow":"jF58x","./TileContext":"kfWiq","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"f9Zvu":[function(require,module,exports,__globalThis) {
-var $parcel$ReactRefreshHelpers$eaa4 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-$parcel$ReactRefreshHelpers$eaa4.init();
-var prevRefreshReg = globalThis.$RefreshReg$;
-var prevRefreshSig = globalThis.$RefreshSig$;
-$parcel$ReactRefreshHelpers$eaa4.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>ModalDetails);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-var _react = require("react");
-var _reactDefault = parcelHelpers.interopDefault(_react);
-var _backgroundDetails = require("./BackgroundDetails");
-var _backgroundDetailsDefault = parcelHelpers.interopDefault(_backgroundDetails);
-var _tileContext = require("./TileContext");
-var _chipDetails = require("./ChipDetails");
-var _chipDetailsDefault = parcelHelpers.interopDefault(_chipDetails);
-var _useFocusTrap = require("../hooks-utils/useFocusTrap");
-var _useFocusTrapDefault = parcelHelpers.interopDefault(_useFocusTrap);
-var _s = $RefreshSig$();
-function ModalDetails({ open, onClose }) {
-    _s();
-    const { data, currentCollectionIndex, currentTileIndex } = (0, _tileContext.useAppContext)();
-    const tileData = data && data.containers[currentCollectionIndex].set.items[currentTileIndex];
-    const focusRef = (0, _react.useRef)(null);
-    const handleClose = (e)=>{
-        open;
-        if (e.key === 'Escape') onClose();
-        else if (e.key === 'Enter') e.stopPropagation();
-    };
-    (0, _react.useEffect)(()=>{
-        if (open) {
-            focusRef.current?.focus();
-            (0, _useFocusTrapDefault.default)();
-        }
-    }, [
-        open
-    ]);
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "modal-overlay",
-        onKeyDown: handleClose,
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-            className: "modal-background",
-            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "modal",
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-                        className: "modal-button",
-                        onClick: onClose,
-                        onKeyDown: handleClose,
-                        ref: focusRef,
-                        tabIndex: 0,
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                                children: [
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("svg", {
-                                        viewBox: "0 0 24 24",
-                                        xmlns: "http://www.w3.org/2000/svg",
-                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("path", {
-                                            d: "M15 18l-6-6 6-6",
-                                            stroke: "white",
-                                            strokeWidth: "2",
-                                            strokeLinecap: "round",
-                                            strokeLinejoin: "round",
-                                            fill: "none"
-                                        }, void 0, false, {
-                                            fileName: "src/components/ModalDetails.tsx",
-                                            lineNumber: 65,
-                                            columnNumber: 33
-                                        }, this)
-                                    }, void 0, false, {
-                                        fileName: "src/components/ModalDetails.tsx",
-                                        lineNumber: 64,
-                                        columnNumber: 29
-                                    }, this),
-                                    " "
-                                ]
-                            }, void 0, true, {
-                                fileName: "src/components/ModalDetails.tsx",
-                                lineNumber: 63,
-                                columnNumber: 25
-                            }, this),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                                children: "Back"
-                            }, void 0, false, {
-                                fileName: "src/components/ModalDetails.tsx",
-                                lineNumber: 68,
-                                columnNumber: 25
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/components/ModalDetails.tsx",
-                        lineNumber: 62,
-                        columnNumber: 21
-                    }, this),
-                    tileData && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Fragment), {
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _backgroundDetailsDefault.default), {
-                                data: tileData
-                            }, void 0, false, {
-                                fileName: "src/components/ModalDetails.tsx",
-                                lineNumber: 73,
-                                columnNumber: 29
-                            }, this),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _chipDetailsDefault.default), {
-                                data: tileData
-                            }, void 0, false, {
-                                fileName: "src/components/ModalDetails.tsx",
-                                lineNumber: 74,
-                                columnNumber: 29
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/components/ModalDetails.tsx",
-                        lineNumber: 72,
-                        columnNumber: 25
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "src/components/ModalDetails.tsx",
-                lineNumber: 61,
-                columnNumber: 17
-            }, this)
-        }, void 0, false, {
-            fileName: "src/components/ModalDetails.tsx",
-            lineNumber: 60,
-            columnNumber: 13
-        }, this)
-    }, void 0, false, {
-        fileName: "src/components/ModalDetails.tsx",
-        lineNumber: 59,
-        columnNumber: 9
-    }, this);
-}
-_s(ModalDetails, "pzoJUfypnwufm7O+Korcgs9rE0A=", false, function() {
-    return [
-        (0, _tileContext.useAppContext)
-    ];
-});
-_c = ModalDetails;
-var _c;
-$RefreshReg$(_c, "ModalDetails");
-
-  $parcel$ReactRefreshHelpers$eaa4.postlude(module);
-} finally {
-  globalThis.$RefreshReg$ = prevRefreshReg;
-  globalThis.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./BackgroundDetails":"89XJW","./TileContext":"kfWiq","./ChipDetails":"cT7kZ","../hooks-utils/useFocusTrap":"cpC3Z","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"89XJW":[function(require,module,exports,__globalThis) {
-var $parcel$ReactRefreshHelpers$863a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-$parcel$ReactRefreshHelpers$863a.init();
-var prevRefreshReg = globalThis.$RefreshReg$;
-var prevRefreshSig = globalThis.$RefreshSig$;
-$parcel$ReactRefreshHelpers$863a.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>BackgroundDetails);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-var _jsxRuntime = require("react/jsx-runtime");
-var _useGetDisplay = require("../hooks-utils/useGetDisplay");
-var _useConvertToPNG = require("../hooks-utils/useConvertToPNG");
-var _useConvertToPNGDefault = parcelHelpers.interopDefault(_useConvertToPNG);
-var _tileImage = require("./TileImage");
-var _s = $RefreshSig$();
-function BackgroundDetails({ data }) {
-    _s();
-    const { backgroundDetails, titleLayer, titleText } = (0, _useGetDisplay.useGetDisplay)(data.image, data.text); // Retrieves the necessary display content like background image and title text
-    const titlePNG = (0, _useConvertToPNGDefault.default)(titleLayer); // converts the title treatment URL to return PNG instead of JPEG
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "background-details",
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-            className: "background-container",
-            children: backgroundDetails ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxRuntime.Fragment), {
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _tileImage.TileImage), {
-                        src: backgroundDetails,
-                        alt: `${titleText ?? "Untitled"} background image`,
-                        className: "background-image"
-                    }, void 0, false, {
-                        fileName: "src/components/BackgroundDetails.tsx",
-                        lineNumber: 27,
-                        columnNumber: 15
-                    }, this),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "background-title-container",
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _tileImage.TileImage), {
-                            src: titlePNG || titleLayer,
-                            alt: `${titleText ?? "Untitled"} title treatment`,
-                            className: "background-title",
-                            text: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                                children: titleText ?? "Untitled"
-                            }, void 0, false, {
-                                fileName: "src/components/BackgroundDetails.tsx",
-                                lineNumber: 38,
-                                columnNumber: 25
-                            }, void 0)
-                        }, void 0, false, {
-                            fileName: "src/components/BackgroundDetails.tsx",
-                            lineNumber: 34,
-                            columnNumber: 17
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "src/components/BackgroundDetails.tsx",
-                        lineNumber: 33,
-                        columnNumber: 15
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "src/components/BackgroundDetails.tsx",
-                lineNumber: 26,
-                columnNumber: 13
-            }, this) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {}, void 0, false, {
-                fileName: "src/components/BackgroundDetails.tsx",
-                lineNumber: 43,
-                columnNumber: 13
-            }, this)
-        }, void 0, false, {
-            fileName: "src/components/BackgroundDetails.tsx",
-            lineNumber: 24,
-            columnNumber: 9
-        }, this)
-    }, void 0, false, {
-        fileName: "src/components/BackgroundDetails.tsx",
-        lineNumber: 23,
-        columnNumber: 7
-    }, this);
-}
-_s(BackgroundDetails, "ZoBzWPKVoiHMutKN1MIwXjgZsiM=", false, function() {
-    return [
-        (0, _useGetDisplay.useGetDisplay),
-        (0, _useConvertToPNGDefault.default)
-    ];
-});
-_c = BackgroundDetails;
-var _c;
-$RefreshReg$(_c, "BackgroundDetails");
-
-  $parcel$ReactRefreshHelpers$863a.postlude(module);
-} finally {
-  globalThis.$RefreshReg$ = prevRefreshReg;
-  globalThis.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"dVPUn","react/jsx-runtime":"05iiF","../hooks-utils/useGetDisplay":"bTT0Y","../hooks-utils/useConvertToPNG":"6Y9ms","./TileImage":"jOUIX","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"05iiF":[function(require,module,exports,__globalThis) {
-'use strict';
-module.exports = require("c4c10cbba9862d5f");
-
-},{"c4c10cbba9862d5f":"gKzlX"}],"gKzlX":[function(require,module,exports,__globalThis) {
-/**
- * @license React
- * react-jsx-runtime.development.js
- *
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */ "use strict";
-(function() {
-    function getComponentNameFromType(type) {
-        if (null == type) return null;
-        if ("function" === typeof type) return type.$$typeof === REACT_CLIENT_REFERENCE ? null : type.displayName || type.name || null;
-        if ("string" === typeof type) return type;
-        switch(type){
-            case REACT_FRAGMENT_TYPE:
-                return "Fragment";
-            case REACT_PROFILER_TYPE:
-                return "Profiler";
-            case REACT_STRICT_MODE_TYPE:
-                return "StrictMode";
-            case REACT_SUSPENSE_TYPE:
-                return "Suspense";
-            case REACT_SUSPENSE_LIST_TYPE:
-                return "SuspenseList";
-            case REACT_ACTIVITY_TYPE:
-                return "Activity";
-        }
-        if ("object" === typeof type) switch("number" === typeof type.tag && console.error("Received an unexpected object in getComponentNameFromType(). This is likely a bug in React. Please file an issue."), type.$$typeof){
-            case REACT_PORTAL_TYPE:
-                return "Portal";
-            case REACT_CONTEXT_TYPE:
-                return (type.displayName || "Context") + ".Provider";
-            case REACT_CONSUMER_TYPE:
-                return (type._context.displayName || "Context") + ".Consumer";
-            case REACT_FORWARD_REF_TYPE:
-                var innerType = type.render;
-                type = type.displayName;
-                type || (type = innerType.displayName || innerType.name || "", type = "" !== type ? "ForwardRef(" + type + ")" : "ForwardRef");
-                return type;
-            case REACT_MEMO_TYPE:
-                return innerType = type.displayName || null, null !== innerType ? innerType : getComponentNameFromType(type.type) || "Memo";
-            case REACT_LAZY_TYPE:
-                innerType = type._payload;
-                type = type._init;
-                try {
-                    return getComponentNameFromType(type(innerType));
-                } catch (x) {}
-        }
-        return null;
-    }
-    function testStringCoercion(value) {
-        return "" + value;
-    }
-    function checkKeyStringCoercion(value) {
-        try {
-            testStringCoercion(value);
-            var JSCompiler_inline_result = !1;
-        } catch (e) {
-            JSCompiler_inline_result = !0;
-        }
-        if (JSCompiler_inline_result) {
-            JSCompiler_inline_result = console;
-            var JSCompiler_temp_const = JSCompiler_inline_result.error;
-            var JSCompiler_inline_result$jscomp$0 = "function" === typeof Symbol && Symbol.toStringTag && value[Symbol.toStringTag] || value.constructor.name || "Object";
-            JSCompiler_temp_const.call(JSCompiler_inline_result, "The provided key is an unsupported type %s. This value must be coerced to a string before using it here.", JSCompiler_inline_result$jscomp$0);
-            return testStringCoercion(value);
-        }
-    }
-    function getTaskName(type) {
-        if (type === REACT_FRAGMENT_TYPE) return "<>";
-        if ("object" === typeof type && null !== type && type.$$typeof === REACT_LAZY_TYPE) return "<...>";
-        try {
-            var name = getComponentNameFromType(type);
-            return name ? "<" + name + ">" : "<...>";
-        } catch (x) {
-            return "<...>";
-        }
-    }
-    function getOwner() {
-        var dispatcher = ReactSharedInternals.A;
-        return null === dispatcher ? null : dispatcher.getOwner();
-    }
-    function UnknownOwner() {
-        return Error("react-stack-top-frame");
-    }
-    function hasValidKey(config) {
-        if (hasOwnProperty.call(config, "key")) {
-            var getter = Object.getOwnPropertyDescriptor(config, "key").get;
-            if (getter && getter.isReactWarning) return !1;
-        }
-        return void 0 !== config.key;
-    }
-    function defineKeyPropWarningGetter(props, displayName) {
-        function warnAboutAccessingKey() {
-            specialPropKeyWarningShown || (specialPropKeyWarningShown = !0, console.error("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)", displayName));
-        }
-        warnAboutAccessingKey.isReactWarning = !0;
-        Object.defineProperty(props, "key", {
-            get: warnAboutAccessingKey,
-            configurable: !0
-        });
-    }
-    function elementRefGetterWithDeprecationWarning() {
-        var componentName = getComponentNameFromType(this.type);
-        didWarnAboutElementRef[componentName] || (didWarnAboutElementRef[componentName] = !0, console.error("Accessing element.ref was removed in React 19. ref is now a regular prop. It will be removed from the JSX Element type in a future release."));
-        componentName = this.props.ref;
-        return void 0 !== componentName ? componentName : null;
-    }
-    function ReactElement(type, key, self, source, owner, props, debugStack, debugTask) {
-        self = props.ref;
-        type = {
-            $$typeof: REACT_ELEMENT_TYPE,
-            type: type,
-            key: key,
-            props: props,
-            _owner: owner
-        };
-        null !== (void 0 !== self ? self : null) ? Object.defineProperty(type, "ref", {
-            enumerable: !1,
-            get: elementRefGetterWithDeprecationWarning
-        }) : Object.defineProperty(type, "ref", {
-            enumerable: !1,
-            value: null
-        });
-        type._store = {};
-        Object.defineProperty(type._store, "validated", {
-            configurable: !1,
-            enumerable: !1,
-            writable: !0,
-            value: 0
-        });
-        Object.defineProperty(type, "_debugInfo", {
-            configurable: !1,
-            enumerable: !1,
-            writable: !0,
-            value: null
-        });
-        Object.defineProperty(type, "_debugStack", {
-            configurable: !1,
-            enumerable: !1,
-            writable: !0,
-            value: debugStack
-        });
-        Object.defineProperty(type, "_debugTask", {
-            configurable: !1,
-            enumerable: !1,
-            writable: !0,
-            value: debugTask
-        });
-        Object.freeze && (Object.freeze(type.props), Object.freeze(type));
-        return type;
-    }
-    function jsxDEVImpl(type, config, maybeKey, isStaticChildren, source, self, debugStack, debugTask) {
-        var children = config.children;
-        if (void 0 !== children) {
-            if (isStaticChildren) {
-                if (isArrayImpl(children)) {
-                    for(isStaticChildren = 0; isStaticChildren < children.length; isStaticChildren++)validateChildKeys(children[isStaticChildren]);
-                    Object.freeze && Object.freeze(children);
-                } else console.error("React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead.");
-            } else validateChildKeys(children);
-        }
-        if (hasOwnProperty.call(config, "key")) {
-            children = getComponentNameFromType(type);
-            var keys = Object.keys(config).filter(function(k) {
-                return "key" !== k;
-            });
-            isStaticChildren = 0 < keys.length ? "{key: someKey, " + keys.join(": ..., ") + ": ...}" : "{key: someKey}";
-            didWarnAboutKeySpread[children + isStaticChildren] || (keys = 0 < keys.length ? "{" + keys.join(": ..., ") + ": ...}" : "{}", console.error('A props object containing a "key" prop is being spread into JSX:\n  let props = %s;\n  <%s {...props} />\nReact keys must be passed directly to JSX without using spread:\n  let props = %s;\n  <%s key={someKey} {...props} />', isStaticChildren, children, keys, children), didWarnAboutKeySpread[children + isStaticChildren] = !0);
-        }
-        children = null;
-        void 0 !== maybeKey && (checkKeyStringCoercion(maybeKey), children = "" + maybeKey);
-        hasValidKey(config) && (checkKeyStringCoercion(config.key), children = "" + config.key);
-        if ("key" in config) {
-            maybeKey = {};
-            for(var propName in config)"key" !== propName && (maybeKey[propName] = config[propName]);
-        } else maybeKey = config;
-        children && defineKeyPropWarningGetter(maybeKey, "function" === typeof type ? type.displayName || type.name || "Unknown" : type);
-        return ReactElement(type, children, self, source, getOwner(), maybeKey, debugStack, debugTask);
-    }
-    function validateChildKeys(node) {
-        "object" === typeof node && null !== node && node.$$typeof === REACT_ELEMENT_TYPE && node._store && (node._store.validated = 1);
-    }
-    var React = require("593632ccebda0d3a"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler");
-    Symbol.for("react.provider");
-    var REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
-        return null;
-    };
-    React = {
-        "react-stack-bottom-frame": function(callStackForError) {
-            return callStackForError();
-        }
-    };
-    var specialPropKeyWarningShown;
-    var didWarnAboutElementRef = {};
-    var unknownOwnerDebugStack = React["react-stack-bottom-frame"].bind(React, UnknownOwner)();
-    var unknownOwnerDebugTask = createTask(getTaskName(UnknownOwner));
-    var didWarnAboutKeySpread = {};
-    exports.Fragment = REACT_FRAGMENT_TYPE;
-    exports.jsx = function(type, config, maybeKey, source, self) {
-        var trackActualOwner = 1e4 > ReactSharedInternals.recentlyCreatedOwnerStacks++;
-        return jsxDEVImpl(type, config, maybeKey, !1, source, self, trackActualOwner ? Error("react-stack-top-frame") : unknownOwnerDebugStack, trackActualOwner ? createTask(getTaskName(type)) : unknownOwnerDebugTask);
-    };
-    exports.jsxs = function(type, config, maybeKey, source, self) {
-        var trackActualOwner = 1e4 > ReactSharedInternals.recentlyCreatedOwnerStacks++;
-        return jsxDEVImpl(type, config, maybeKey, !0, source, self, trackActualOwner ? Error("react-stack-top-frame") : unknownOwnerDebugStack, trackActualOwner ? createTask(getTaskName(type)) : unknownOwnerDebugTask);
-    };
-})();
-
-},{"593632ccebda0d3a":"jMk1U"}],"bTT0Y":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "useGetDisplay", ()=>useGetDisplay);
-const aspectRatio = 1.78; // Default aspect ratio
-function useGetDisplay(image, text) {
-    // Retrieves the display content, including background image, title text, and tile image.
-    const sizes = Object.keys(image.tile || {});
-    const firstSize = sizes[0];
-    const contentType = Object.keys(image.tile[firstSize] || {})[0];
-    const overlayType = contentType === 'collection' || contentType === 'default' ? 'logo_layer' : 'title_treatment';
-    const tileImage = image.tile[aspectRatio || firstSize][contentType]?.default?.url || '';
-    const backgroundDetails = image?.background_details?.[aspectRatio]?.[contentType]?.default?.url || image?.background?.[aspectRatio]?.[contentType]?.default?.url || image?.hero_collection?.[aspectRatio]?.[contentType]?.default?.url || ''; // Fallback to the first available background image if specific details are not found
-    const titleText = text?.title?.full?.[contentType]?.default?.content || text?.title?.full?.collection?.default?.content || '';
-    const titleLayer = image?.[overlayType]?.[aspectRatio]?.[contentType]?.default?.url || image?.logo?.['2.00']?.[contentType]?.default?.url || '';
-    return {
-        firstSize,
-        contentType,
-        sizes,
-        backgroundDetails,
-        tileImage,
-        titleLayer,
-        titleText
-    };
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"6Y9ms":[function(require,module,exports,__globalThis) {
-// Converts a given link to a PNG format by appending the appropriate query parameter.
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>useConvertToPNG);
-function useConvertToPNG(link) {
-    if (link) {
-        const url = new URL(link);
-        const urlParams = new URLSearchParams(url.search);
-        urlParams.set('format', 'png');
-        const newUrl = `${url.origin}${url.pathname}?${urlParams.toString()}`;
-        return newUrl;
-    }
-    return;
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jOUIX":[function(require,module,exports,__globalThis) {
-var $parcel$ReactRefreshHelpers$9950 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-$parcel$ReactRefreshHelpers$9950.init();
-var prevRefreshReg = globalThis.$RefreshReg$;
-var prevRefreshSig = globalThis.$RefreshSig$;
-$parcel$ReactRefreshHelpers$9950.prelude(module);
-
-try {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-/**
- * Renders an image with error handling and fallback support.
- *
- * The `TileImage` component attempts to display an image from the provided `src`.
- * If the image fails to load, it displays a fallback element or a default placeholder with optional text.
- * The error state resets whenever the `src` prop changes.
- *
- * @param src - The source URL of the image.
- * @param alt - The alt text for the image.
- * @param fallback - Optional React node to display if the image fails to load.
- * @param text - Optional text to display in the default fallback placeholder.
- * @param props - Additional props to pass to the underlying `<img>` element.
- *
- * @returns The image element, a fallback, or a default placeholder if loading fails.
- */ parcelHelpers.export(exports, "TileImage", ()=>TileImage);
-var _jsxDevRuntime = require("react/jsx-dev-runtime");
-var _react = require("react");
-var _reactDefault = parcelHelpers.interopDefault(_react);
-var _s = $RefreshSig$();
-function DefaultFallback({ children }) {
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "image-placeholder",
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-            className: "image-placeholder-text",
-            children: children
-        }, void 0, false, {
-            fileName: "src/components/TileImage.tsx",
-            lineNumber: 13,
-            columnNumber: 13
-        }, this)
-    }, void 0, false, {
-        fileName: "src/components/TileImage.tsx",
-        lineNumber: 12,
-        columnNumber: 9
-    }, this);
-}
-_c = DefaultFallback;
-function TileImage({ src, alt, fallback, text, ...props }) {
-    _s();
-    const [hasError, setHasError] = (0, _react.useState)(false);
-    (0, _react.useEffect)(()=>{
-        //Detects if source has changed and resets the error state
-        setHasError(false);
-    }, [
-        src
-    ]);
-    if (hasError) // If there is an error loading the image, return the fallback or a default placeholder
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
-        children: fallback || /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(DefaultFallback, {
-            children: text
-        }, void 0, false, {
-            fileName: "src/components/TileImage.tsx",
-            lineNumber: 45,
-            columnNumber: 5
-        }, this)
-    }, void 0, false);
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-        src: src,
-        alt: alt,
-        onError: ()=>{
-            setHasError(true);
-        },
-        ...props
-    }, src, false, {
-        fileName: "src/components/TileImage.tsx",
-        lineNumber: 49,
-        columnNumber: 5
-    }, this);
-}
-_s(TileImage, "Y10BwSn8jQ4wQtRAtRxoscEk2KA=");
-_c1 = TileImage;
-var _c, _c1;
-$RefreshReg$(_c, "DefaultFallback");
-$RefreshReg$(_c1, "TileImage");
-
-  $parcel$ReactRefreshHelpers$9950.postlude(module);
-} finally {
-  globalThis.$RefreshReg$ = prevRefreshReg;
-  globalThis.$RefreshSig$ = prevRefreshSig;
-}
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"cT7kZ":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"cT7kZ":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$5d0c = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$5d0c.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -19566,7 +19453,120 @@ function trapFocus(e, focusableEls, firstEl, lastEl) {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jF58x":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"lHa1o":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$e00d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$e00d.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$e00d.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useAppContext", ()=>useAppContext);
+parcelHelpers.export(exports, "AppProvider", ()=>AppProvider);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _useGetData = require("../hooks-utils/useGetData");
+var _s = $RefreshSig$(), _s1 = $RefreshSig$();
+const AppContext = /*#__PURE__*/ (0, _react.createContext)(undefined);
+function useAppContext() {
+    _s();
+    const context = (0, _react.useContext)(AppContext);
+    if (!context) throw new Error("useAppContext must be used within an AppProvider");
+    return context;
+}
+_s(useAppContext, "b9L3QQ+jgeyIrH0NfHrJ8nn7VMU=");
+const AppProvider = ({ children })=>{
+    _s1();
+    const [currentTileIndex, setCurrentTileIndex] = (0, _react.useState)(0);
+    const [currentTileData, setCurrentTileData] = (0, _react.useState)(null);
+    const [currentCollectionIndex, setCurrentCollectionIndex] = (0, _react.useState)(0);
+    const [currentCollectionData, setCurrentCollectionData] = (0, _react.useState)(null);
+    const data = (0, _useGetData.useGetData)().data;
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(AppContext.Provider, {
+        value: {
+            data,
+            currentTileIndex,
+            setCurrentTileIndex,
+            currentTileData,
+            setCurrentTileData,
+            currentCollectionIndex,
+            setCurrentCollectionIndex,
+            currentCollectionData,
+            setCurrentCollectionData
+        },
+        children: children
+    }, void 0, false, {
+        fileName: "src/context/TileContext.tsx",
+        lineNumber: 40,
+        columnNumber: 9
+    }, undefined);
+};
+_s1(AppProvider, "O0Hs45jocMmyraiqgEX8sVUdtMA=", false, function() {
+    return [
+        (0, _useGetData.useGetData)
+    ];
+});
+_c = AppProvider;
+var _c;
+$RefreshReg$(_c, "AppProvider");
+
+  $parcel$ReactRefreshHelpers$e00d.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","../hooks-utils/useGetData":"itwBn","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"itwBn":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$0261 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$0261.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$0261.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useGetData", ()=>useGetData);
+var _react = require("react");
+var _s = $RefreshSig$();
+const url = 'https://cd-static.bamgrid.com/dp-7068675309/home.json';
+const useGetData = ()=>{
+    _s();
+    const [data, setData] = (0, _react.useState)();
+    const [loading, setLoading] = (0, _react.useState)(true);
+    const [error, setError] = (0, _react.useState)(null);
+    (0, _react.useEffect)(()=>{
+        async function getData() {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`Response status: ${response.status}`);
+                const json = await response.json();
+                setData(json.data.StandardCollection);
+            // return json.data.StandardCollection as Response;
+            } catch (error) {
+                console.error(error);
+                setError('An error occured.');
+            } finally{
+                setLoading(false);
+            }
+        }
+        getData();
+    }, []);
+    return {
+        data,
+        loading,
+        error
+    };
+};
+_s(useGetData, "Fc++DvcSUDM3/vBA98cprlVWLM0=");
+
+  $parcel$ReactRefreshHelpers$0261.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"jMk1U","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"jF58x":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$7070 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$7070.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -19581,7 +19581,7 @@ var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _jsxRuntime = require("react/jsx-runtime");
 var _tile = require("./Tile");
 var _tileDefault = parcelHelpers.interopDefault(_tile);
-var _tileContext = require("./TileContext");
+var _tileContext = require("../context/TileContext");
 var _s = $RefreshSig$();
 function TileRow() {
     _s();
@@ -19615,7 +19615,7 @@ $RefreshReg$(_c, "TileRow");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react/jsx-runtime":"05iiF","./Tile":"43ae3","./TileContext":"kfWiq","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"43ae3":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react/jsx-runtime":"05iiF","./Tile":"43ae3","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/TileContext":"lHa1o"}],"43ae3":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$1c5d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$1c5d.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -19632,7 +19632,7 @@ var _reactDefault = parcelHelpers.interopDefault(_react);
 var _tileImage = require("./TileImage");
 var _useGetDisplay = require("../hooks-utils/useGetDisplay");
 var _tileFallbackImage = require("./TileFallbackImage");
-var _tileContext = require("./TileContext");
+var _tileContext = require("../context/TileContext");
 var _videoPlayback = require("./VideoPlayback");
 var _s = $RefreshSig$();
 function Tile(props) {
@@ -19765,7 +19765,7 @@ $RefreshReg$(_c, "Tile");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./TileImage":"jOUIX","../hooks-utils/useGetDisplay":"bTT0Y","./TileFallbackImage":"8wBMi","./TileContext":"kfWiq","./VideoPlayback":"aOG3p","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"8wBMi":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","./TileImage":"jOUIX","../hooks-utils/useGetDisplay":"bTT0Y","./TileFallbackImage":"8wBMi","./VideoPlayback":"aOG3p","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","../context/TileContext":"lHa1o"}],"8wBMi":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$c5a0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$c5a0.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
