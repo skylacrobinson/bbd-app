@@ -4,7 +4,7 @@
 <div align="left">
 
 
-# Disney Browser-Based Device - Take Home Assignment
+# Take Home Assignment
 
 <em>"The way to get started is to quit talking and begin doing." -Walt Disney</em>
 
