@@ -34,7 +34,7 @@ This project is a simplified feature implementation of a Disney+ style home page
 **Live Demo at https://skylacrobinson.github.io/bbd-app/**
 
 
-## Features
+### Features
 
 - 🎯 **Focus Management:** Implements focus trapping and utilizes keyboard navigation for main user interactions.
 - 🖼️ **Media Handling:** Supports dynamic image conversion, fallback images, and inline video playback for engaging multimedia experiences.
@@ -44,6 +44,7 @@ This project is a simplified feature implementation of a Disney+ style home page
 
 
 ---
+
 
 ## Usage
 This app was built to only require keyboard in put. Some of the keyboard commands include:
