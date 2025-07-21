@@ -1,7 +1,7 @@
-import React, { Fragment, KeyboardEvent, useEffect, useRef } from "react";
+import { Fragment, KeyboardEvent, useEffect, useRef } from "react";
 import BackgroundDetails from "./BackgroundDetails";
 import { TileInfo } from "../types/TileInfo";
-import { useAppContext } from "./TileContext";
+import { useAppContext } from "../context/AppContext";
 import ChipDetails from "./ChipDetails";
 import useFocusTrap from "../hooks-utils/useFocusTrap";
 

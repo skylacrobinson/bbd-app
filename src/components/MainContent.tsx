@@ -1,7 +1,7 @@
 import { Fragment, KeyboardEvent, useEffect, useRef, useState } from "react";
 import ModalDetails from "./ModalDetails";
 import TileRow from "./TileRow";
-import { useAppContext } from "./TileContext";
+import { useAppContext } from "../context/AppContext";
 
 
 /**
