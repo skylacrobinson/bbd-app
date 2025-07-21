@@ -8,11 +8,9 @@
 
 <em>"The way to get started is to quit talking and begin doing." -Walt Disney</em>
 
-This project is a simplified feature implementation of a Disney+ style home page interface, built with React and TypeScript. The app fetches content from a public JSON API and allows remote-style navigation using arrow keys. It combines modular components, focus management, component animations, and dynamic media handling to deliver seamless a user experience that prioritizes keyboard interactions.
+This project is a simplified feature implementation of a Disney+-style streaming application home page interface. The React app fetches content from a public JSON API and allows remote-style navigation using arrow keys. It combines modular components, focus management, component animations, and dynamic media handling to deliver seamless a user experience that prioritizes keyboard interactions.
 
 <!-- BADGES -->
-<img src="https://img.shields.io/github/languages/top/skylacrobinson/bbd-app?style=flat&color=0080ff" alt="repo-top-language">
-<img src="https://img.shields.io/github/languages/count/skylacrobinson/bbd-app?style=flat&color=0080ff" alt="repo-language-count">
 <br/>
 
 <em>Built with these tools and technologies:</em>
@@ -61,9 +59,9 @@ Something I love about web development is that the possibilities are endless whe
 
 If I had more time to build this project and explore the possibilities, I would...
 
-- Integrate responsiveness to various devices and screen sizes
-- Improve animation features, particularly exit animations
-- Add unit and integration tests using Jest and React Testing Library
+- 📱 Integrate responsiveness to various devices and screen sizes
+- ✨ Improve animation features, particularly exit animations
+- 🧪 Add unit tests to detect bug and improve code quality
 <br/>
 
 #### Folder Structure
