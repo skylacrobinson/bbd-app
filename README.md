@@ -13,6 +13,7 @@ This project is a simplified feature implementation of a Disney+ style home page
 <!-- BADGES -->
 <img src="https://img.shields.io/github/languages/top/skylacrobinson/bbd-app?style=flat&color=0080ff" alt="repo-top-language">
 <img src="https://img.shields.io/github/languages/count/skylacrobinson/bbd-app?style=flat&color=0080ff" alt="repo-language-count">
+<br>
 
 <em>Built with these tools and technologies:</em>
 <br>
