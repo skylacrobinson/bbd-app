@@ -2,10 +2,13 @@
   "name": "parcel-react-client-starter",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://skylacrobinson.github.io/bbd-app/",
   "source": "src/index.html",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "start": "parcel",
-    "build": "parcel build"
+    "build": "parcel build src/index.html --public-url /bbd-app/ --no-optimize"
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -16,5 +19,13 @@
     "@types/react-dom": "^19.0.0",
     "gh-pages": "^6.3.0",
     "parcel": "^2.14.0"
-  }
+  },
+  
+    "targets": {
+      "default": {
+        "distDir": "./dist"
+      }
+    }
+  
+
 }

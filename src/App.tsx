@@ -1,5 +1,5 @@
 import './App.css';
-import { AppProvider } from './components/TileContext';
+import { AppProvider } from './context/AppContext';
 import MainContent from './components/MainContent';
 import { useGetData } from './hooks-utils/useGetData';
 import Instructions from './components/Instructions';

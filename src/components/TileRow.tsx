@@ -1,6 +1,6 @@
 import { Fragment } from "react/jsx-runtime";
 import Tile from "./Tile";
-import { useAppContext } from "./TileContext";
+import { useAppContext } from "../context/AppContext";
 
 
 /**

@@ -1,9 +1,9 @@
-import React, { HTMLProps, ReactNode, useEffect, useState,useRef, use } from "react";
+import  { useEffect, useState } from "react";
 import { TileInfo } from "../types/TileInfo";
 import { TileImage } from "./TileImage";
 import { useGetDisplay } from "../hooks-utils/useGetDisplay";
 import { FallbackImage } from "./TileFallbackImage";
-import { useAppContext } from "./TileContext";
+import { useAppContext } from "../context/AppContext";
 import { VideoPlayback } from "./VideoPlayback";
 
 
