@@ -8,7 +8,7 @@
 
 <em>"The way to get started is to quit talking and begin doing." -Walt Disney</em>
 
-This project is a simplified feature implementation of a Disney+-style streaming application home page interface. The React app fetches content from a public JSON API and allows remote-style navigation using arrow keys. It combines modular components, focus management, component animations, and dynamic media handling to deliver seamless a user experience that prioritizes keyboard interactions.
+This project is a simplified feature implementation of a Disney+ style streaming application home page interface. The React app fetches content from a public JSON API and allows remote-style navigation using arrow keys. It combines modular components, focus management, component animations, and dynamic media handling to deliver a seamless user experience that prioritizes keyboard interactions.
 
 <!-- BADGES -->
 <br/>
