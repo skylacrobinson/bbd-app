@@ -34,7 +34,7 @@ This project is a simplified feature implementation of a Disney+ style streaming
 ---
 ### Features
 
-- 🎯 **Focus Management:** Implements focus trapping and utilizes keyboard navigation for mauser interactions.
+- 🎯 **Focus Management:** Implements focus trapping and utilizes keyboard navigation for managing user interactions.
 - 🖼️ **Media Handling:** Supports dynamic image conversion, fallback images, and inline video playback for engaging multimedia experiences.
 - ⚙️ **Modular Components:** Provides reusable UI elements like tiles, modals, and navigation aids for flexible interface design.
 - 🔄 **Data Integration:** Facilitates efficient data fetching from Disney+ API and handles data inconsistencies with TypeScript.
