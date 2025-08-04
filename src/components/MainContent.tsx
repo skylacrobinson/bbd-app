@@ -23,8 +23,6 @@ import { useAppContext } from "../context/AppContext";
  * - Integrates with a context provider for managing collection and tile state.
  * - Supports video playback when a tile is focused for more than 2 seconds.
  * 
- *
- * @component
  * @returns {JSX.Element} The rendered main content area with navigation and modal support.
  */
 
@@ -39,7 +37,7 @@ export default function MainContent(){
     currentTileIndex, 
     setCurrentTileIndex,
     setCurrentTileData,
-  }=useAppContext();
+  }=useAppContext(); //Retrieve context values for data, current collection and tile indices, and functions to update them
 
   const containerRef = useRef<HTMLDivElement>(null); // Reference to the tile row container
 
@@ -56,6 +54,7 @@ export default function MainContent(){
   useEffect(() => {
     // Add wheel event listener to the containerRef
     // This prevents horizontal scrolling when using a mouse wheel or trackpad
+    
     const element = containerRef.current;
     if (containerRef.current) {
       element?.addEventListener('wheel', handleWheel, { passive: false });

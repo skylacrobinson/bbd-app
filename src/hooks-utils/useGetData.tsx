@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { TileInfo } from "../types/TileInfo"
 
 export interface Response{
-    calltoAction: any,
+    callToAction: any,
     collectionGroup:CollectionGroup
     collectionId:string
     containers:Containers[]
@@ -12,10 +12,6 @@ export interface Response{
     videoArt:[]
 }
 
-interface Data {
-    StandardCollection:Response 
-
-}
 
 interface CollectionGroup{
     collectionGroupId: string
@@ -54,7 +50,14 @@ const url= 'https://cd-static.bamgrid.com/dp-7068675309/home.json'
 
 
 
-
+/** Custom hook to fetch data from a given URL and return the response, loading state, and error state.
+This hook uses the Fetch API to retrieve data from the specified URL and manages the loading and error
+states internally.
+ * @returns {Object} An object containing the fetched data, loading state, and error state.
+ * - `data`: The fetched data from the URL.
+ * - `loading`: A boolean indicating whether the data is currently being loaded.
+ * - `error`: A string containing any error message that occurred during the fetch operation.
+ */
 export const useGetData=()=>{
   const [data, setData] = useState<Response>();
   const [loading, setLoading] = useState(true);
@@ -69,11 +72,11 @@ export const useGetData=()=>{
     const json = await response.json();
    
     setData(json.data.StandardCollection as Response);
-    // return json.data.StandardCollection as Response;
+    
     
   } catch (error) {
     console.error(error);
-    setError('An error occured.');
+    setError('An error occurred.');
   } finally{
     setLoading(false);
   }

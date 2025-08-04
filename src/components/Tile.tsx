@@ -1,7 +1,7 @@
 import  { useEffect, useState } from "react";
 import { TileInfo } from "../types/TileInfo";
 import { TileImage } from "./TileImage";
-import { useGetDisplay } from "../hooks-utils/useGetDisplay";
+import { getDisplayContent } from "../hooks-utils/getDisplayContent";
 import { FallbackImage } from "./TileFallbackImage";
 import { useAppContext } from "../context/AppContext";
 import { VideoPlayback } from "./VideoPlayback";
@@ -19,18 +19,18 @@ interface TileProps extends TileInfo {
  * memory leaks. The component also integrates with application context to determine the currently
  * focused tile.
  * 
- * @param props - The properties for the Tile component.
- * @param props.image - The image source or identifier for the tile.
- * @param props.text - The text label or title for the tile.
- * @param props.index - The index of the tile in the list/grid.
- * @param props.videoArt - An array of video sources or data for video preview.
+
+ * @param image - The image source or identifier for the tile.
+ * @param text - The text label or title for the tile.
+ * @param index - The index of the tile in the list/grid.
+ * @param videoArt - An array of video sources or data for video preview.
  * 
  * @returns React element representing the tile, which displays either an image or a video preview
  *          depending on focus state and available video content.
  */
 export default function Tile(props:TileProps) {
     const {image, text, index, videoArt} = props;
-    const {titleText, tileImage}=useGetDisplay(image,text)
+    const {titleText, tileImage}=getDisplayContent(image,text)
     const {currentTileIndex, currentCollectionIndex}= useAppContext();
    const [view, setView] = useState<'tile'|'video'>('tile');
 

@@ -30,7 +30,9 @@ li .header{
   outline-offset: 2px;
   border-radius:4px;
 }
+
 /* INSTRUCTIONS */
+
 .instructions {
   margin:10px
 
@@ -43,7 +45,9 @@ li .header{
   font-size: 20px;
   margin-bottom: 2px;
 }
+
 /* VIEWPORT */
+
 .view {
   width: 1080px;
   background-color:#17171B;
@@ -57,7 +61,9 @@ margin-left:12px;
 margin-bottom: 6px;
 font-family: "InspireTWDC";
 }
+
 /* TILE */
+
 .tile{
   aspect-ratio: 16/9;
   align-content: center;
@@ -88,7 +94,9 @@ font-family: "InspireTWDC";
  a .tile{
  height: fit-content;
 }
+
 /* TILE ROW */
+
 .tile-row{
   display: flex;
   flex-direction: row;
@@ -116,7 +124,6 @@ font-family: "InspireTWDC";
   aspect-ratio: 16/9;
   animation: fadeIn 300ms forwards;
 
-
 }
 
 .tile-content {
@@ -129,6 +136,7 @@ font-family: "InspireTWDC";
 }
 
 /* VIDEO */
+
 video{
   border-radius: 4px;
   animation: fadeIn 100ms forwards;
@@ -356,6 +364,7 @@ html:active-view-transition-type(ArrowLeft, ArrowRight) {
     transform:scale(0);
   }
 }
+
 @keyframes unfoldIn {
   0% {
     transform:scaleY(.005) scaleX(0);

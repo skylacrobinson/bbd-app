@@ -1,8 +1,11 @@
 import { TileInfo } from "../types/TileInfo";
+
+/**
+ * This function extracts the necessary information from the TileInfo object to render the background and title details
+ */
 const aspectRatio = 1.78; // Default aspect ratio
 
-export function useGetDisplay(image: TileInfo['image'], text: TileInfo['text']) {
-  // Retrieves the display content, including background image, title text, and tile image.
+export function getDisplayContent(image: TileInfo['image'], text: TileInfo['text']) {
   const sizes = Object.keys(image.tile || {});
   const firstSize= sizes[0];
   const contentType = Object.keys(image.tile[firstSize] || {})[0];

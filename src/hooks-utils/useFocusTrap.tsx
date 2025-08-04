@@ -24,6 +24,7 @@ const focusableSelectors = [
             '[href]',
             '[tabindex]:not([tabindex="-1"])'
         ];
+
  export default function useFocusTrap() {
         const modal = document.querySelector('.modal');
         if (!modal) return; // If no modal is found, exit the hook early.
@@ -44,6 +45,9 @@ const focusableSelectors = [
         };
     }
 
+/**
+ * Handles the focus trapping logic for keyboard navigation within the modal.
+ */
 function trapFocus(e: KeyboardEvent, focusableEls: HTMLElement[], firstEl: HTMLElement, lastEl: HTMLElement) {
         if (e.key !== 'Tab') return;
         if (focusableEls.length === 0) return;

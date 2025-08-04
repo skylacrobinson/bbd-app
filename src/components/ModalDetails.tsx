@@ -2,7 +2,7 @@ import { Fragment, KeyboardEvent, useEffect, useRef } from "react";
 import BackgroundDetails from "./BackgroundDetails";
 import { TileInfo } from "../types/TileInfo";
 import { useAppContext } from "../context/AppContext";
-import ChipDetails from "./ChipDetails";
+import ChipContainer from "./ChipContainer";
 import useFocusTrap from "../hooks-utils/useFocusTrap";
 
 
@@ -22,8 +22,8 @@ interface ModalDetailsProps {
  * - Displays background details and chips for the selected tile.
  * - Uses `useAppContext` to access application data and selection indices.
  * - Focuses the close button and traps focus when the modal is open.
- * - Renders `BackgroundDetails` and `ChipDetails` for the selected tile.
- * 
+ * - Renders `BackgroundDetails` and `ChipContainer` for the selected tile.
+ *
  * @param {boolean} props.open - Controls whether the modal is open or closed.
  * @param {() => void} props.onClose - Callback function to close the modal.
  *
@@ -71,7 +71,7 @@ export default function ModalDetails({ open, onClose }: ModalDetailsProps) {
                     {tileData && (
                         <Fragment>
                             <BackgroundDetails data={tileData} />
-                            <ChipDetails data={tileData} />
+                            <ChipContainer data={tileData} />
                         </Fragment>
                     )}
 

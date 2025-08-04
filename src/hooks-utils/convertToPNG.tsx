@@ -1,5 +1,5 @@
 // Converts a given link to a PNG format by appending the appropriate query parameter.
-export default function useConvertToPNG(link:string) { 
+export default function convertToPNG(link:string) { 
 if (link) {
     const url= new URL(link);
     const urlParams = new URLSearchParams(url.search);
